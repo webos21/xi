@@ -1,4 +1,4 @@
 xi
 ==
 
-xi(x-integrator) is a embedded platform for developers using c language.  
+xi(x-integrator) is an embedded platform for developers using c language.  
