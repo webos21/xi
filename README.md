@@ -1,4 +1,4 @@
-Ct
+xi
 ==
 
-Ct is a cross-platform toolkit for developers using c language.
+xi(x-integrator) is a embedded platform for developers using c language.  
