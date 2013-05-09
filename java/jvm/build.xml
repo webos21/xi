@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!-- Project is started from target "all"  -->
+<project name="xi.java.jvm" default="all" basedir="../..">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
+		<echo>Warning : you are here without proper command!!!!</echo>
+		<property environment="env" />
+		<property file="${basedir}/buildx/ant/project.properties" />
+		<property file="${basedir}/buildx/ant/java.properties" />
+		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+
+	<!-- PREPARE : Make Directories -->
+	<target name="_prepare.mkdir" depends="_prepare.prop">
+		<!-- Base -->
+		<dirname property="current_dir_abs" file="${ant.file}" />
+		<basename property="current_dir_rel" file="${current_dir_abs}" />
+
+		<!-- Target -->
+		<property name="module_dir_target" value="${basedir}/ant/${build_cfg_target}/java/${current_dir_rel}" />
+		<property name="module_dir_object" value="${module_dir_target}/objects" />
+		<mkdir dir="${module_dir_target}" />
+		<mkdir dir="${module_dir_object}" />
+
+		<!-- Output -->
+		<property name="module_dir_output_base" value="${basedir}/ant/${build_cfg_target}/emul" />
+		<property name="module_dir_output_bin" value="${module_dir_output_base}/bin" />
+		<property name="module_dir_output_inc" value="${module_dir_output_base}/include" />
+		<property name="module_dir_output_lib" value="${module_dir_output_base}/lib" />
+		<property name="module_dir_output_res" value="${module_dir_output_base}/res" />
+		<property name="module_dir_output_test" value="${module_dir_output_base}/test" />
+		<mkdir dir="${module_dir_output_base}" />
+		<mkdir dir="${module_dir_output_bin}" />
+		<mkdir dir="${module_dir_output_inc}" />
+		<mkdir dir="${module_dir_output_lib}" />
+		<mkdir dir="${module_dir_output_res}" />
+		<mkdir dir="${module_dir_output_test}" />
+
+		<!-- Options -->
+		<property name="module_build_src_bin" value="" />
+		<property name="module_build_src_in" value="" />
+		<property name="module_build_src_ex" value="" />
+		<property name="module_build_incdirs" value="-I${module_dir_output_inc} -I${current_dir_abs}/jamvm" />
+		<property name="module_build_libdirs" value="-L${module_dir_output_lib} -lz -lffi" />
+		<property name="module_build_rpath" value="${module_dir_output_lib}" />
+		<property name="module_build_target_a" value="" />
+		<property name="module_build_target_so" value="" />
+		<property name="module_build_target_bin" value="jvm${build_opt_exe_ext}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>================================================================</echo>
+		<echo>ant.file                : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>current_dir_abs         : ${current_dir_abs}</echo>
+		<echo>current_dir_rel         : ${current_dir_rel}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_target       : ${module_dir_target}</echo>
+		<echo>module_dir_object       : ${module_dir_object}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_output_base  : ${module_dir_output_base}</echo>
+		<echo>module_dir_output_bin   : ${module_dir_output_bin}</echo>
+		<echo>module_dir_output_inc   : ${module_dir_output_inc}</echo>
+		<echo>module_dir_output_lib   : ${module_dir_output_lib}</echo>
+		<echo>module_dir_output_res   : ${module_dir_output_res}</echo>
+		<echo>module_dir_output_test  : ${module_dir_output_test}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
+		<echo>module_build_src_in     : ${module_build_src_in}</echo>
+		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
+		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
+		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
+		<echo>module_build_rpath      : ${module_build_rpath}</echo>
+		<echo>module_build_target_a   : ${module_build_target_a}</echo>
+		<echo>module_build_target_so  : ${module_build_target_so}</echo>
+		<echo>module_build_target_bin : ${module_build_target_bin}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<target name="_prepare" depends="_prepare.result" />
+
+	<!-- ====================            BUILD           ================== -->
+
+	<target name="_build.lo" depends="_prepare">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-fno-reorder-blocks" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}" includes="**/*.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.bin" depends="_build.lo">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_build_target_bin}" />
+			<srcfile />
+			<arg line="${module_build_libdirs}" />
+			<!-- add XI library link -->
+			<arg line="-lxibase" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<arg line="${build_opt_libexe}" />
+			<fileset dir="${module_dir_object}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.so.bcm7403" depends="_build.lo" if="build_cfg_bcm7403">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}libmiddle.so" />
+			<arg line="${build_opt_ld_rpath},${module_build_rpath}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/libmiddle.so" />
+			<srcfile />
+			<arg line="${module_build_libdirs}" />
+			<!-- add XI library link -->
+			<arg line="-lxibase" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${module_dir_object}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.emul" depends="_build.bin, _build.so.bcm7403">
+		<copy todir="${module_dir_output_bin}">
+			<fileset dir="${module_dir_target}" includes="${module_build_target_bin}" />
+		</copy>
+		<chmod perm="0755" file="${module_dir_output_bin}/${module_build_target_bin}" />
+		<chmod perm="0755" file="${module_dir_output_lib}/*.${build.opt.so.ext}" />
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- All -->
+	<target name="all" depends="_prepare, _build.emul" />
+
+	<!-- CLEAN -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${module_dir_target}" />
+	</target>
+
+</project>

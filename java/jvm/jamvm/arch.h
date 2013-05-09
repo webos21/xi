@@ -1,0 +1,194 @@
+/*
+ * Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
+ * Robert Lougher <rob@jamvm.org.uk>.
+ *
+ * This file is part of JamVM.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2,
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifdef __mips__
+
+#define OS_ARCH "mips"
+
+/* Override default min and max heap sizes.  MIPS machines are
+   usually embedded, and the standard defaults are too large. */
+#define DEFAULT_MAX_HEAP 8*MB
+#define DEFAULT_MIN_HEAP 1*MB
+
+#define FFI_RET_EXTEND // added by cmcho
+
+#define HANDLER_TABLE_T static const void
+#define DOUBLE_1_BITS 0x3ff0000000000000LL
+
+#define READ_DBL(v,p,l) v = ((u8)p[0]<<56)|((u8)p[1]<<48)|((u8)p[2]<<40) \
+                            |((u8)p[3]<<32)|((u8)p[4]<<24)|((u8)p[5]<<16) \
+                            |((u8)p[6]<<8)|(u8)p[7]; p+=8
+
+#define FPU_HACK
+
+#define COMPARE_AND_SWAP_32(addr, old_val, new_val) \
+({                                                  \
+    int result, read_val;                           \
+    __asm__ __volatile__ ("                         \
+              .set      push\n                      \
+              .set      mips2\n                     \
+      1:      ll        %1,%2\n                     \
+              move      %0,$0\n                     \
+              bne       %1,%3,2f\n                  \
+              move      %0,%4\n                     \
+              sc        %0,%2\n                     \
+              .set      pop\n                       \
+              beqz      %0,1b\n                     \
+      2:"                                           \
+    : "=&r" (result), "=&r" (read_val)              \
+    : "m" (*addr), "r" (old_val), "r" (new_val)     \
+    : "memory");                                    \
+    result;                                         \
+})
+
+#define COMPARE_AND_SWAP(addr, old_val, new_val)    \
+        COMPARE_AND_SWAP_32(addr, old_val, new_val)
+
+#define LOCKWORD_READ(addr) *addr
+#define LOCKWORD_WRITE(addr, value) *addr = value
+#define LOCKWORD_COMPARE_AND_SWAP(addr, old_val, new_val) \
+        COMPARE_AND_SWAP(addr, old_val, new_val)
+
+#ifdef INLINING
+#error Inlining not supported as FLUSH_CACHE unimplemented \
+       on this architecture
+#endif
+
+#define MBARRIER()              \
+    __asm__ __volatile__ ("     \
+        .set push\n             \
+        .set mips2\n            \
+        sync\n                  \
+        .set  pop\n"            \
+    ::: "memory")
+
+#define JMM_LOCK_MBARRIER()   MBARRIER()
+#define JMM_UNLOCK_MBARRIER() MBARRIER()
+
+
+#else // !__mips__
+
+#if defined(_x86_64) || defined(__MINGW64__)
+#define OS_ARCH "amd64"
+#else
+#define OS_ARCH "i686"
+#endif
+
+/* On i386 prior to gcc 4.3, return types less than 4 bytes in size
+   were zero or sign extended.  This no longer happens, and so when
+   calling a method through FFI, we need to do the extension.  This
+   is unnecessary on most architectures */
+#define FFI_RET_EXTEND
+
+#define HANDLER_TABLE_T static const void
+#define DOUBLE_1_BITS 0x3ff0000000000000LL
+
+#define READ_DBL(v,p,l)	do {v = ((u8)p[0]<<56)|((u8)p[1]<<48)|((u8)p[2]<<40) \
+                            |((u8)p[3]<<32)|((u8)p[4]<<24)|((u8)p[5]<<16)    \
+                            |((u8)p[6]<<8)|(u8)p[7]; p+=8;} while(0)
+
+//extern void setDoublePrecision();
+//#define FPU_HACK setDoublePrecision()
+#define FPU_HACK
+
+#define COMPARE_AND_SWAP_32(addr, old_val, new_val) \
+({                                                  \
+    char result;                                    \
+    __asm__ __volatile__ ("                         \
+        lock;                                       \
+        cmpxchgl %4, %1;                            \
+        sete %0"                                    \
+    : "=q" (result), "=m" (*addr)                   \
+    : "m" (*addr), "a" (old_val), "r" (new_val)     \
+    : "memory");                                    \
+    result;                                         \
+})
+
+#ifdef USE_CMPXCHG8B
+#define COMPARE_AND_SWAP_64(addr, old_val, new_val) \
+({                                                  \
+    int ov_hi = old_val >> 32;                      \
+    int ov_lo = old_val & 0xffffffff;               \
+    int nv_hi = new_val >> 32;                      \
+    int nv_lo = new_val & 0xffffffff;               \
+    char result;                                    \
+    __asm__ __volatile__ ("                         \
+        lock;                                       \
+        cmpxchg8b %1;                               \
+        sete %0"                                    \
+    : "=q" (result)                                 \
+    : "m" (*addr), "d" (ov_hi), "a" (ov_lo),        \
+      "c" (nv_hi), "b" (nv_lo)                      \
+    : "memory");                                    \
+    result;                                         \
+})
+#endif
+
+#define COMPARE_AND_SWAP(addr, old_val, new_val)    \
+        COMPARE_AND_SWAP_32(addr, old_val, new_val)
+
+#define __GEN_REL_JMP(target_addr, patch_addr, opcode,       \
+                      type, patch_size)                      \
+({                                                           \
+    int patched = FALSE;                                     \
+                                                             \
+    if(patch_size >= 1 + sizeof(type)) {                     \
+        char *nxt_ins_ptr = (patch_addr) + 1 + sizeof(type); \
+                                                             \
+        /* Guard against the pointer difference being        \
+           larger than the signed range */                   \
+        long long disp = (xuintptr)(target_addr) -          \
+                         (xuintptr)(nxt_ins_ptr);           \
+        long long limit = 1LL << ((sizeof(type) * 8) - 1);   \
+                                                             \
+        if(disp >= -limit && disp < limit) {                 \
+            *(patch_addr) = opcode;                          \
+            *(type*)&(patch_addr)[1] = disp;                 \
+            patched = TRUE;                                  \
+        }                                                    \
+    }                                                        \
+    patched;                                                 \
+})
+
+#define GEN_REL_JMP(target_addr, patch_addr, patch_size) \
+({                                                       \
+    __GEN_REL_JMP(target_addr, patch_addr, 0xeb,         \
+                  signed char, patch_size) ||            \
+    __GEN_REL_JMP(target_addr, patch_addr, 0xe9,         \
+                  signed int, patch_size);               \
+})
+
+#define FLUSH_CACHE(addr, length)
+
+#define LOCKWORD_READ(addr) *addr
+#define LOCKWORD_WRITE(addr, value) *addr = value
+#define LOCKWORD_COMPARE_AND_SWAP(addr, old_val, new_val) \
+        COMPARE_AND_SWAP(addr, old_val, new_val)
+
+#define JMM_LOCK_MBARRIER() __asm__ __volatile__ ("" ::: "memory")
+#define JMM_UNLOCK_MBARRIER() __asm__ __volatile__ ("" ::: "memory")
+#if defined(_x86_64) || defined(__MINGW64__)
+#define MBARRIER() __asm__ __volatile__ ("mfence" ::: "memory")
+#else
+#define MBARRIER() __asm__ __volatile__ ("lock; addl $0,0(%%esp)" ::: "memory")
+#endif
+
+#endif // __mips__

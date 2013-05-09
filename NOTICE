@@ -1,0 +1,44 @@
+"xi" uses various libraries, and their licenses are in "doc/license".
+Thank the authors for their great jobs.
+
+======================================================================
+
+* freetype
+  - License : The FreeType Project LICENSE
+  - Homepage : http://www.freetype.org
+
+* icu4c
+  - License : ICU License
+  - Homepage : http://www.icu-project.org
+
+* libffi
+  - License : Open Source
+  - Homepage : http://sourceware.org/libffi
+
+* libiconv
+  - License : GNU GPL
+  - Homepage : http://www.gnu.org/software/libiconv/
+
+* libjpeg
+  - License : IJG License
+  - Homepage : http://libjpeg.sourceforge.net/
+
+* libpng
+  - License : The zlib/libpng License
+  - Homepage : http://www.libpng.org/pub/png/libpng.html
+
+* zlib
+  - License : The zlib/libpng License
+  - Homepage : http://zlib.net/
+
+* JamVM
+  - License : GNU GPL
+  - Homepage : http://jamvm.sourceforge.net/
+
+* Apache Harmony Classpath
+  - License : Apache License, Version 2.0
+  - Homepage : http://harmony.apache.org/  (retired project)
+
+* Google Android
+  - License : Apache License, Version 2.0
+  - Homepage : http://www.android.com/

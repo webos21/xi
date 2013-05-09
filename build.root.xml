@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<project name="xi.root" default="usage" basedir=".">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Environment -->
+	<target name="_prepare.env">
+		<property environment="env" />
+	</target>
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.antcfg" depends="_prepare.env">
+		<condition property="ant_cfg_issetTarget">
+			<isset property="ant_cfg_target" />
+		</condition>
+		<condition property="ant_cfg_isWin">
+			<os family="windows" />
+		</condition>
+		<condition property="ant_cfg_isOSX">
+			<and>
+				<os family="mac" />
+				<os family="unix" />
+			</and>
+		</condition>
+		<condition property="ant_cfg_isXnix">
+			<and>
+				<os family="unix" />
+				<not>
+					<os family="mac" />
+				</not>
+			</and>
+		</condition>
+		<dirname property="test_java_home" file="${java.home}" />
+		<property name="build_tool_javac" value="${test_java_home}/bin/javac" />
+	</target>
+
+	<!-- PREPARE : Load Properties -->
+	<!-- you can define additional properties in [build_target.properties]!!!      -->
+	<target name="_prepare.load.def" depends="_prepare.antcfg">
+		<property file="${basedir}/buildx/ant/project.properties" />
+		<property file="${basedir}/buildx/ant/java.properties" />
+	</target>
+	<target name="_prepare.load.buildprop" depends="_prepare.load.def" if="ant_cfg_issetTarget">
+		<echo>Load the request properties - [${basedir}/buildx/ant/build_${ant_cfg_target}.properties]</echo>
+		<property file="${basedir}/buildx/ant/build_${ant_cfg_target}.properties" />
+	</target>
+	<target name="_prepare.load.defprop" depends="_prepare.load.def" unless="ant_cfg_issetTarget">
+		<echo>Load the default properties - [${basedir}/buildx/ant/build_${project_def_target}.properties]</echo>
+		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+	<target name="_prepare.load" depends="_prepare.load.buildprop, _prepare.load.defprop" />
+
+	<!-- PREPARE : Check Properties -->
+	<target name="_prepare.check.runnable" depends="_prepare.load">
+		<condition property="ant_cfg_isRunnable">
+			<or>
+				<!-- Xnix can build [linux32,linux64,bcm7403,smp8654] -->
+				<and>
+					<contains string="linux32,linux64,bcm7403,smp8654" substring="${build_cfg_target}" />
+					<and>
+						<os family="unix" />
+						<not>
+							<os family="mac" />
+						</not>
+					</and>
+				</and>
+				<!-- OSX can build [osx32,osx64] -->
+				<and>
+					<contains string="osx32,osx64" substring="${build_cfg_target}" />
+					<and>
+						<os family="unix" />
+						<os family="mac" />
+					</and>
+				</and>
+				<!-- Windows can build [mingw32,mingw64] -->
+				<and>
+					<contains string="mingw32,mingw64" substring="${build_cfg_target}" />
+					<os family="windows" />
+				</and>
+			</or>
+		</condition>
+	</target>
+	<target name="_prepare.check.fail" depends="_prepare.check.runnable" unless="ant_cfg_isRunnable">
+		<echo>Your OS is [${os.name}] and you request ${build_cfg_target}!!!</echo>
+		<echo>Cannot proceed the building!!!</echo>
+		<fail message="Cannot build!!!!!" />
+	</target>
+	<target name="_prepare.check" depends="_prepare.check.runnable, _prepare.check.fail" />
+
+	<!-- PREPARE : Make Directories -->
+	<target name="_prepare.mkdir" depends="_prepare.check">
+		<mkdir dir="${basedir}/ant" />
+		<mkdir dir="${basedir}/ant/${build_cfg_target}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>======================= ${project_name} - Build Plan ========================</echo>
+		<echo>os.name                 : ${os.name}</echo>
+		<echo>os.arch                 : ${os.arch}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>ant.home                : ${env.ANT_HOME}</echo>
+		<echo>ant.file                : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>project_version         : ${project_version}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>build_cfg_target        : ${build_cfg_target}</echo>
+		<echo>build_dir_target        : ${basedir}/ant/${build_cfg_target}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>build_tool_javac        : ${build_tool_javac}</echo>
+		<echo>build_tool_cc           : ${build_tool_cc}</echo>
+		<echo>build_tool_cxx          : ${build_tool_cxx}</echo>
+		<echo>build_tool_linker       : ${build_tool_linker}</echo>
+		<echo>build_tool_ar           : ${build_tool_ar}</echo>
+		<echo>build_tool_ranlib       : ${build_tool_ranlib}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>build_opt_a_pre         : ${build_opt_a_pre}</echo>
+		<echo>build_opt_a_ext         : ${build_opt_a_ext}</echo>
+		<echo>build_opt_so_pre        : ${build_opt_so_pre}</echo>
+		<echo>build_opt_so_ext        : ${build_opt_so_ext}</echo>
+		<echo>build_opt_exe_ext       : ${build_opt_exe_ext}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>build_opt_c             : ${build_opt_c}</echo>
+		<echo>build_opt_cxx           : ${build_opt_cxx}</echo>
+		<echo>build_opt_ld            : ${build_opt_ld}</echo>
+		<echo>build_opt_ld_so         : ${build_opt_ld_so}</echo>
+		<echo>build_opt_ld_noud       : ${build_opt_ld_noud}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>build_opt_fPIC          : ${build_opt_fPIC}</echo>
+		<echo>build_opt_mnocyg        : ${build_opt_mnocyg}</echo>
+		<echo>build_opt_libgcc        : ${build_opt_libgcc}</echo>
+		<echo>build_opt_libgxx        : ${build_opt_libgxx}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<target name="_prepare" depends="_prepare.result" />
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- START : default entry point -->
+	<target name="usage">
+		<echo>==================== USAGE =====================</echo>
+		<echo>* You can choose binary types</echo>
+		<echo>  in belows : </echo>
+		<echo>  - binary type  : linux, macosx, mingw, bcm7403, smp8654</echo>
+		<echo>---------------------------------------------</echo>
+		<echo>* So, actual commands are like these : </echo>
+		<echo>  - ant linux32  : build all modules for linux 32bit</echo>
+		<echo>  - ant linux64  : build all modules for linux 64bit</echo>
+		<echo>  - ant osx32    : build all modules for osx 32bit</echo>
+		<echo>  - ant osx64    : build all modules for osx 64bit</echo>
+		<echo>  - ant mingw32  : build all modules for mingw 32bit</echo>
+		<echo>  - ant mingw64  : build all modules for mingw 64bit</echo>
+		<echo>  - ant android  : build all modules for android</echo>
+		<echo>  - ant bcm7403  : build all modules for bcm7403</echo>
+		<echo>  - ant smp8654  : build all modules for smp8654</echo>
+		<echo>================================================</echo>
+	</target>
+
+	<!-- Externals -->
+	<target name="external.build" depends="_prepare">
+		<echo>External.build</echo>
+		<subant antfile="external/build.xml" inheritall="true" buildpath="${basedir}" />
+	</target>
+	<target name="external.clean" depends="_prepare">
+		<echo>External.clean</echo>
+		<subant antfile="external/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<!-- XI -->
+	<target name="xi.build" depends="_prepare">
+		<echo>XI.build</echo>
+		<subant antfile="src/build.xml" inheritall="true" buildpath="${basedir}" />
+	</target>
+	<target name="xi.clean" depends="_prepare">
+		<echo>XI.clean</echo>
+		<subant antfile="src/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<!-- JAVA -->
+	<target name="java.build" depends="_prepare">
+		<echo>JAVA.build</echo>
+		<subant antfile="java/build.xml" inheritall="true" buildpath="${basedir}" />
+	</target>
+	<target name="java.clean" depends="_prepare">
+		<echo>JAVA.clean</echo>
+		<subant antfile="java/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<!-- All -->
+	<target name="all" depends="external.build, xi.build, java.build" />
+
+	<!-- CLEAN : delete top build and test files -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${basedir}/ant/${build_cfg_target}" />
+	</target>
+
+</project>

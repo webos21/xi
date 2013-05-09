@@ -1,0 +1,4 @@
+LIBRARY "icui18n"
+; ICU-i18n library
+
+EXPORTS

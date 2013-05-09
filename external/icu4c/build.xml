@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!-- Project is started from target "all"  -->
+<project name="xi.external.icu4c" default="all" basedir="../..">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
+		<echo>Warning : you are here without proper command!!!!</echo>
+		<property environment="env" />
+		<property file="${basedir}/buildx/ant/project.properties" />
+		<property file="${basedir}/buildx/ant/java.properties" />
+		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+
+	<!-- PREPARE : Make Directories -->
+	<target name="_prepare.mkdir" depends="_prepare.prop">
+		<!-- Base -->
+		<dirname property="current_dir_abs" file="${ant.file}" />
+		<basename property="current_dir_rel" file="${current_dir_abs}" />
+
+		<!-- Target -->
+		<property name="module_dir_target" value="${basedir}/ant/${build_cfg_target}/external/${current_dir_rel}" />
+		<property name="module_dir_object" value="${module_dir_target}/objects" />
+		<property name="module_dir_object_icuuc" value="${module_dir_object}/icuuc" />
+		<property name="module_dir_object_icui18n" value="${module_dir_object}/icui18n" />
+		<mkdir dir="${module_dir_target}" />
+		<mkdir dir="${module_dir_object}" />
+		<mkdir dir="${module_dir_object_icuuc}" />
+		<mkdir dir="${module_dir_object_icui18n}" />
+
+		<!-- Output -->
+		<property name="module_dir_output_base" value="${basedir}/ant/${build_cfg_target}/emul" />
+		<property name="module_dir_output_bin" value="${module_dir_output_base}/bin" />
+		<property name="module_dir_output_inc" value="${module_dir_output_base}/include" />
+		<property name="module_dir_output_inc_icu4c" value="${module_dir_output_inc}/unicode" />
+		<property name="module_dir_output_lib" value="${module_dir_output_base}/lib" />
+		<property name="module_dir_output_res" value="${module_dir_output_base}/res" />
+		<property name="module_dir_output_test" value="${module_dir_output_base}/test" />
+		<mkdir dir="${module_dir_output_base}" />
+		<mkdir dir="${module_dir_output_bin}" />
+		<mkdir dir="${module_dir_output_inc}" />
+		<mkdir dir="${module_dir_output_inc_icu4c}" />
+		<mkdir dir="${module_dir_output_lib}" />
+		<mkdir dir="${module_dir_output_res}" />
+		<mkdir dir="${module_dir_output_test}" />
+
+		<!-- Options -->
+		<property name="module_inc_tmp01" value='"ICU_HOME"' />
+		<property name="module_inc_tmp02" value='"../res/icu"' />
+		<property name="module_build_src_bin" value="" />
+		<property name="module_build_src_in" value="" />
+		<property name="module_build_src_ex" value="" />
+		<property name="module_build_incdirs_icuuc" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n '-DICU_DATA_DIR_PREFIX_ENV_VAR=${module_inc_tmp01}' '-DICU_DATA_DIR=${module_inc_tmp02}' -DU_COMMON_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_flags} " />
+		<property name="module_build_incdirs_icui18n" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n -DU_I18N_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_flags} " />
+		<property name="module_build_libdirs" value="" />
+		<property name="module_build_target_a_icuuc" value="${build_opt_a_pre}icuuc.${build_opt_a_ext}" />
+		<property name="module_build_target_a_icui18n" value="${build_opt_a_pre}icui18n.${build_opt_a_ext}" />
+		<property name="module_build_target_so_icuuc" value="${build_opt_so_pre}icuuc.${build_opt_so_ext}" />
+		<property name="module_build_target_so_icui18n" value="${build_opt_so_pre}icui18n.${build_opt_so_ext}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>================================================================</echo>
+		<echo>ant.file                       : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>current_dir_abs                : ${current_dir_abs}</echo>
+		<echo>current_dir_rel                : ${current_dir_rel}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_target              : ${module_dir_target}</echo>
+		<echo>module_dir_object              : ${module_dir_object}</echo>
+		<echo>module_dir_object_icuuc        : ${module_dir_object_icuuc}</echo>
+		<echo>module_dir_object_icui18n      : ${module_dir_object_icui18n}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_output_base         : ${module_dir_output_base}</echo>
+		<echo>module_dir_output_bin          : ${module_dir_output_bin}</echo>
+		<echo>module_dir_output_inc          : ${module_dir_output_inc}</echo>
+		<echo>module_dir_output_inc_icu4c    : ${module_dir_output_inc_icu4c}</echo>
+		<echo>module_dir_output_lib          : ${module_dir_output_lib}</echo>
+		<echo>module_dir_output_res          : ${module_dir_output_res}</echo>
+		<echo>module_dir_output_test         : ${module_dir_output_test}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_build_src_bin           : ${module_build_src_bin}</echo>
+		<echo>module_build_src_in            : ${module_build_src_in}</echo>
+		<echo>module_build_src_ex            : ${module_build_src_ex}</echo>
+		<echo>module_build_incdirs_icuuc     : ${module_build_incdirs_icuuc}</echo>
+		<echo>module_build_incdirs_icui18n   : ${module_build_incdirs_icui18n}</echo>
+		<echo>module_build_libdirs           : ${module_build_libdirs}</echo>
+		<echo>module_build_target_a_icuuc    : ${module_build_target_a_icuuc}</echo>
+		<echo>module_build_target_a_icui18n  : ${module_build_target_a_icui18n}</echo>
+		<echo>module_build_target_so_icuuc   : ${module_build_target_so_icuuc}</echo>
+		<echo>module_build_target_so_icui18n : ${module_build_target_so_icui18n}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<target name="_prepare" depends="_prepare.result" />
+
+	<!-- ====================            BUILD           ================== -->
+
+	<target name="_build.o.icuuc" depends="_prepare" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icuuc}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icuuc}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/common" includes="*.c" excludes="*props_data.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.o" />
+			</chainedmapper>
+		</apply>
+		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icuuc}" failonerror="true">
+			<arg line="${build_opt_cxx}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icuuc}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/common" includes="*.cpp" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.cpp" to="*.o" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.o.icui18n" depends="_prepare" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icui18n}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icui18n}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/i18n" includes="*.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.o" />
+			</chainedmapper>
+		</apply>
+		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icui18n}" failonerror="true">
+			<arg line="${build_opt_cxx}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icui18n}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/i18n" includes="*.cpp" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.cpp" to="*.o" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.lo.icuuc" depends="_prepare" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icuuc}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icuuc}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/common" includes="*.c" excludes="*props_data.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icuuc}" failonerror="true">
+			<arg line="${build_opt_cxx}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icuuc}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/common" includes="*.cpp" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.cpp" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.lo.icui18n" depends="_prepare" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icui18n}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icui18n}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/i18n" includes="*.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icui18n}" failonerror="true">
+			<arg line="${build_opt_cxx}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs_icui18n}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/i18n" includes="*.cpp" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.cpp" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.a.icuuc" depends="_build.o.icuuc" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_ar}" failonerror="true">
+			<arg line="rcu" />
+			<arg file="${module_dir_target}/${module_build_target_a_icuuc}" />
+			<srcfile />
+			<fileset dir="${module_dir_object_icuuc}" includes="*.o" />
+		</apply>
+		<exec executable="${build_tool_ranlib}" failonerror="true">
+			<arg file="${module_dir_target}/${module_build_target_a_icuuc}" />
+		</exec>
+	</target>
+	<target name="_build.a.icui18n" depends="_build.o.icui18n" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_ar}" failonerror="true">
+			<arg line="rcu" />
+			<arg file="${module_dir_target}/${module_build_target_a_icui18n}" />
+			<srcfile />
+			<fileset dir="${module_dir_object_icui18n}" includes="*.o" />
+		</apply>
+		<exec executable="${build_tool_ranlib}" failonerror="true">
+			<arg file="${module_dir_target}/${module_build_target_a_icui18n}" />
+		</exec>
+	</target>
+	<target name="_build.so.icuuc" depends="_build.lo.icuuc" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}${module_build_target_so_icuuc}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_build_target_so_icuuc}" />
+			<srcfile />
+			<arg line="${build_ext_icuuc_dlldef}" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${module_dir_object_icuuc}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.so.icui18n" depends="_build.lo.icui18n" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}${module_build_target_so_icui18n}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_build_target_so_icui18n}" />
+			<srcfile />
+			<arg line="${build_ext_icui18n_dlldef}" />
+			<!-- add icuuc library reference for icui18n -->
+			<arg line="-L${module_dir_target} -licuuc" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${module_dir_object_icui18n}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.emul" depends="_build.a.icuuc, _build.a.icui18n, _build.so.icuuc, _build.so.icui18n">
+		<copy todir="${module_dir_output_inc_icu4c}">
+			<fileset dir="${current_dir_abs}/common/unicode" includes="*.h" />
+			<fileset dir="${current_dir_abs}/i18n/unicode" includes="*.h" />
+		</copy>
+		<copy todir="${module_dir_output_lib}">
+			<fileset dir="${module_dir_target}" includes="${module_build_target_a_icuuc},${module_build_target_a_icui18n},${module_build_target_so_icuuc},${module_build_target_so_icui18n}" />
+		</copy>
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- All -->
+	<target name="all" depends="_prepare, _build.emul" />
+
+	<!-- CLEAN -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${module_dir_target}" />
+	</target>
+
+</project>

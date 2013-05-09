@@ -1,0 +1,4 @@
+LIBRARY "jpeg"
+; JPEG library
+
+EXPORTS

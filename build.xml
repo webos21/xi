@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<project name="xi" default="usage" basedir=".">
+
+	<!-- ====================           USAGE            ================== -->
+
+	<target name="_usage.show">
+		<echo>==================== USAGE =====================</echo>
+		<echo>* You can choose binary types</echo>
+		<echo>  in belows : </echo>
+		<echo>  - binary type  : linux32, linux64, osx32, osx64, mingw32, mingw64, android, bcm7403, smp8654</echo>
+		<echo>---------------------------------------------</echo>
+		<echo>* So, actual commands are like these : </echo>
+		<echo>  - ant linux32  : build all modules for linux 32bit</echo>
+		<echo>  - ant linux64  : build all modules for linux 64bit</echo>
+		<echo>  - ant osx32    : build all modules for osx 32bit</echo>
+		<echo>  - ant osx64    : build all modules for osx 64bit</echo>
+		<echo>  - ant mingw32  : build all modules for mingw 32bit</echo>
+		<echo>  - ant mingw64  : build all modules for mingw 64bit</echo>
+		<echo>  - ant android  : build all modules for android</echo>
+		<echo>  - ant bcm7403  : build all modules for bcm7403</echo>
+		<echo>  - ant smp8654  : build all modules for smp8654</echo>
+		<echo>================================================</echo>
+	</target>
+
+	<!-- ====================           BUILD            ================== -->
+
+	<target name="_build.show">
+		<echo>==================== BUILD =====================</echo>
+		<echo>
+		</echo>
+		<echo>                  #    #     #</echo>
+		<echo>                   #  #      #</echo>
+		<echo>                    ##       #</echo>
+		<echo>                    ##       #</echo>
+		<echo>                   #  #      #</echo>
+		<echo>                  #    #     #</echo>
+		<echo>
+		</echo>
+		<echo>------------------------------------------------</echo>
+		<echo> * build target is ${ant_cfg_target}</echo>
+		<echo>================================================</echo>
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- START : default entry point -->
+	<target name="usage" depends="_usage.show" />
+
+	<target name="linux32">
+		<property name="ant_cfg_target" value="linux32" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="linux64">
+		<property name="ant_cfg_target" value="linux64" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="osx32">
+		<property name="ant_cfg_target" value="osx32" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="osx64">
+		<property name="ant_cfg_target" value="osx64" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="bcm7403">
+		<property name="ant_cfg_target" value="bcm7403" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="smp8654">
+		<property name="ant_cfg_target" value="smp8654" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="mingw32">
+		<property name="ant_cfg_target" value="mingw32" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="mingw64">
+		<property name="ant_cfg_target" value="mingw64" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="entire" depends="linux32, linux64, mingw32, mingw64, osx32, osx64" />
+
+	<target name="doc">
+		<exec executable="doxygen" failonerror="true">
+			<arg file="buildx/doxygen.cfg" />
+		</exec>
+	</target>
+
+	<target name="clean">
+		<delete dir="${basedir}/ant" />
+	</target>
+
+</project>

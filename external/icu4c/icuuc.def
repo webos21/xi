@@ -1,0 +1,4 @@
+LIBRARY "icuuc"
+; ICU-common library
+
+EXPORTS

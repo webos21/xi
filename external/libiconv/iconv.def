@@ -1,0 +1,7 @@
+LIBRARY "iconv"
+; ICONV library
+
+EXPORTS
+iconv_open
+iconv
+iconv_close

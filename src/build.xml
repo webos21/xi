@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!-- Project is started from target "all"  -->
+<project name="xi.src" default="all" basedir="..">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
+		<echo>Warning : you are here without proper command!!!!</echo>
+		<property environment="env" />
+		<property file="${basedir}/buildx/ant/project.properties" />
+		<property file="${basedir}/buildx/ant/java.properties" />
+		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+
+	<!-- PREPARE : Make Directories - avoid collision of variables' name -->
+	<target name="_prepare.mkdir" depends="_prepare.prop">
+		<!-- Base -->
+		<dirname property="xi_src_abs" file="${ant.file}" />
+		<basename property="xi_src_rel" file="${xi_src_abs}" />
+
+		<!-- Target -->
+		<property name="xi_src_target" value="${basedir}/ant/${build_cfg_target}/xi" />
+		<mkdir dir="${xi_src_target}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>================================================================</echo>
+		<echo>ant.file                : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>xi_src_abs              : ${xi_src_abs}</echo>
+		<echo>xi_src_rel              : ${xi_src_rel}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>xi_src_target           : ${xi_src_target}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<!-- PREPARE -->
+	<target name="_prepare" depends="_prepare.result" />
+
+
+	<!-- ====================           MODULE           ================== -->
+
+	<!-- All -->
+	<target name="_xi.xibase" depends="_prepare">
+		<echo>JAVA - jvm</echo>
+		<subant antfile="${xi_src_rel}/base/build.xml" inheritall="true" buildpath="${basedir}" />
+	</target>
+	<target name="_xi.xibase.clean" depends="_prepare">
+		<subant antfile="${xi_src_rel}/base/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- All -->
+	<target name="all" depends="_prepare, _xi.xibase" />
+
+	<!-- CLEAN -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${xi_src_target}" />
+	</target>
+
+</project>

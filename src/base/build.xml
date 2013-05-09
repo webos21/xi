@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<project name="xi.src.base" default="all" basedir="../..">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
+		<echo>Warning : you are here without proper command!!!!</echo>
+		<property environment="env" />
+		<property file="${basedir}/buildx/ant/project.properties" />
+		<property file="${basedir}/buildx/ant/java.properties" />
+		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+
+	<!-- PREPARE : Make Directories -->
+	<target name="_prepare.mkdir" depends="_prepare.prop">
+		<!-- Base -->
+		<dirname property="current_dir_abs" file="${ant.file}" />
+		<basename property="current_dir_rel" file="${current_dir_abs}" />
+
+		<!-- Target -->
+		<property name="module_dir_target" value="${basedir}/ant/${build_cfg_target}/xi/${current_dir_rel}" />
+		<property name="module_dir_object" value="${module_dir_target}/objects" />
+		<property name="module_dir_test" value="${module_dir_target}/test" />
+		<mkdir dir="${module_dir_target}" />
+		<mkdir dir="${module_dir_object}" />
+		<mkdir dir="${module_dir_test}" />
+
+		<!-- Output -->
+		<property name="module_dir_output_base" value="${basedir}/ant/${build_cfg_target}/emul" />
+		<property name="module_dir_output_bin" value="${module_dir_output_base}/bin" />
+		<property name="module_dir_output_inc" value="${module_dir_output_base}/include" />
+		<property name="module_dir_output_lib" value="${module_dir_output_base}/lib" />
+		<property name="module_dir_output_res" value="${module_dir_output_base}/res" />
+		<property name="module_dir_output_test" value="${module_dir_output_base}/test" />
+		<mkdir dir="${module_dir_output_base}" />
+		<mkdir dir="${module_dir_output_bin}" />
+		<mkdir dir="${module_dir_output_inc}" />
+		<mkdir dir="${module_dir_output_lib}" />
+		<mkdir dir="${module_dir_output_res}" />
+		<mkdir dir="${module_dir_output_test}" />
+
+		<!-- Options -->
+		<property name="module_build_src_bin" value="${build_xibase_src_bin}" />
+		<property name="module_build_src_in" value="${build_xibase_src_in}" />
+		<property name="module_build_src_ex" value="${build_xibase_src_ex}" />
+		<property name="module_build_incdirs" value="${build_xibase_inc_dir}" />
+		<property name="module_build_libdirs" value="${build_xibase_lib_dir}" />
+		<property name="module_build_target_a" value="${build_opt_a_pre}xibase.${build_opt_a_ext}" />
+		<property name="module_build_target_so" value="${build_opt_so_pre}xibase.${build_opt_so_ext}" />
+
+		<property name="module_test_src_bin" value="${buildtc_xibase_src_bin}" />
+		<property name="module_test_src_in" value="${buildtc_xibase_src_in}" />
+		<property name="module_test_src_ex" value="${buildtc_xibase_src_ex}" />
+		<property name="module_test_incdirs" value="${buildtc_xibase_inc_dir}" />
+		<property name="module_test_libdirs" value="${buildtc_xibase_lib_dir}" />
+		<property name="module_test_target_a" value="${build_opt_a_pre}xibasetest.${build_opt_a_ext}" />
+		<property name="module_test_target_so" value="${build_opt_so_pre}xibasetest.${build_opt_so_ext}" />
+		<property name="module_test_target_bin" value="xibasetest${build_opt_exe_ext}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>================================================================</echo>
+		<echo>ant.file                : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>current_dir_abs         : ${current_dir_abs}</echo>
+		<echo>current_dir_rel         : ${current_dir_rel}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_target       : ${module_dir_target}</echo>
+		<echo>module_dir_object       : ${module_dir_object}</echo>
+		<echo>module_dir_test         : ${module_dir_test}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_output_base  : ${module_dir_output_base}</echo>
+		<echo>module_dir_output_bin   : ${module_dir_output_bin}</echo>
+		<echo>module_dir_output_inc   : ${module_dir_output_inc}</echo>
+		<echo>module_dir_output_lib   : ${module_dir_output_lib}</echo>
+		<echo>module_dir_output_res   : ${module_dir_output_res}</echo>
+		<echo>module_dir_output_test  : ${module_dir_output_test}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
+		<echo>module_build_src_in     : ${module_build_src_in}</echo>
+		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
+		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
+		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
+		<echo>module_build_target_a   : ${module_build_target_a}</echo>
+		<echo>module_build_target_so  : ${module_build_target_so}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_test_src_bin     : ${module_test_src_bin}</echo>
+		<echo>module_test_src_in      : ${module_test_src_in}</echo>
+		<echo>module_test_src_ex      : ${module_test_src_ex}</echo>
+		<echo>module_test_incdirs     : ${module_test_incdirs}</echo>
+		<echo>module_test_libdirs     : ${module_test_libdirs}</echo>
+		<echo>module_test_target_a    : ${module_test_target_a}</echo>
+		<echo>module_test_target_so   : ${module_test_target_so}</echo>
+		<echo>module_test_target_bin  : ${module_test_target_bin}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<target name="_prepare" depends="_prepare.result" />
+
+	<!-- ====================            BUILD           ================== -->
+
+	<!-- BUILD : xibase  -->
+	<target name="_build.xibase.o" depends="_prepare" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/src" includes="${module_build_src_in}" excludes="${module_build_src_ex}" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.o" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.xibase.lo" depends="_prepare" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_build_incdirs}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/src" includes="${module_build_src_in}" excludes="${module_build_src_ex}" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.xibase.a" depends="_build.xibase.o" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_ar}" failonerror="true">
+			<arg line="rcu" />
+			<arg file="${module_dir_target}/${module_build_target_a}" />
+			<srcfile />
+			<fileset dir="${module_dir_object}" includes="*.o" />
+		</apply>
+		<exec executable="${build_tool_ranlib}" failonerror="true">
+			<arg file="${module_dir_target}/${module_build_target_a}" />
+		</exec>
+	</target>
+	<target name="_build.xibase.so" depends="_build.xibase.lo" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}${module_build_target_so}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_build_target_so}" />
+			<srcfile />
+			<arg line="${module_build_libdirs}" />
+			<arg line="${build_xibase_lib_mod}" />
+			<arg line="${build_xibase_dlldef}" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${module_dir_object}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.xibase" depends="_build.xibase.a, _build.xibase.so" />
+
+	<!-- BUILD : test  -->
+	<target name="_build.test.o" depends="_prepare" if="build_run_test">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_test}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="-c" />
+			<arg line="${module_test_incdirs}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/test" includes="${module_test_src_in}" excludes="${module_test_src_ex}" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.o" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.test.lo" depends="_prepare" if="build_run_test">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_test}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="-c" />
+			<arg line="${module_test_incdirs}" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/test" includes="${module_test_src_in}" excludes="${module_test_src_ex}" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.test.a" depends="_build.test.o" if="build_run_test">
+		<apply verbose="true" executable="${build_tool_ar}" failonerror="true">
+			<arg line="rcu" />
+			<arg file="${module_dir_target}/${module_test_target_a}" />
+			<srcfile />
+			<fileset dir="${module_dir_test}" includes="*.o" />
+		</apply>
+		<exec executable="${build_tool_ranlib}" failonerror="true">
+			<arg file="${module_dir_target}/${module_test_target_a}" />
+		</exec>
+	</target>
+	<target name="_build.test.so" depends="_build.test.lo" if="build_run_test">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}${module_test_target_so}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_test_target_so}" />
+			<srcfile />
+			<arg line="${module_test_libdirs}" />
+			<!-- add module target directory to Library reference -->
+			<arg line="-L${module_dir_target}" />
+			<arg line="${buildtc_xibase_lib_mod}" />
+			<arg line="${buildtc_xibase_dlldef}" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${module_dir_test}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.test.bin" depends="_build.test.so" if="build_run_test">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_test_target_bin}" />
+			<srcfile />
+			<arg line="${module_test_incdirs}" />
+			<arg line="${module_test_libdirs}" />
+			<!-- add module target directory to Library reference -->
+			<arg line="-L${module_dir_target}" />
+			<arg line="${buildtc_xibase_lib_mod}" />
+			<!-- add test module to including library -->
+			<arg line="-lxibasetest" />
+			<arg line="${build_opt_mnocyg}" />
+			<arg line="${build_opt_libgcc}" />
+			<arg line="${build_opt_libgxx}" />
+			<fileset dir="${current_dir_abs}/test" includes="${module_test_src_bin}" />
+		</apply>
+	</target>
+	<target name="_build.test" depends="_build.test.a, _build.test.so, _build.test.bin" />
+
+	<target name="_build.output" depends="_build.xibase, _build.test">
+		<copy todir="${module_dir_output_inc}">
+			<fileset dir="${basedir}/include" includes="**/**.h" />
+		</copy>
+		<copy todir="${module_dir_output_lib}">
+			<fileset dir="${module_dir_target}" includes="${module_build_target_a}, ${module_build_target_so}" />
+		</copy>
+		<copy todir="${module_dir_output_base}">
+			<fileset dir="${basedir}/lib/${build_cfg_target}" includes="**/**" />
+		</copy>
+		<copy todir="${module_dir_output_res}">
+			<fileset dir="${basedir}/res" includes="**/*" />
+		</copy>
+		<copy todir="${module_dir_output_test}">
+			<fileset dir="${module_dir_target}" includes="${module_test_target_a}, ${module_test_target_so}, ${module_test_target_bin}" />
+		</copy>
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- All -->
+	<target name="all" depends="_prepare, _build.output" />
+
+	<!-- CLEAN -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${module_dir_target}" />
+	</target>
+
+</project>
