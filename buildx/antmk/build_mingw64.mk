@@ -16,9 +16,9 @@
 ######################################################
 #                        XI                          #
 #----------------------------------------------------#
-# File    : build.mingw32.properties                 #
+# File    : build.mingw.properties                   #
 # Version : 0.1.0                                    #
-# Desc    : properties file for MinGW 32bit build.   #
+# Desc    : properties file for MinGW build.         #
 #----------------------------------------------------#
 # History)                                           #
 #   - 2011/06/15 : Created by cmjo                   #
@@ -26,9 +26,15 @@
 
 
 ########################
+# Programs
+########################
+include ${basedir}/buildx/antmk/shprog.mk
+
+
+########################
 # Build Configuration
 ########################
-build_cfg_target  = mingw32
+build_cfg_target  = mingw64
 build_cfg_mingw   = 1
 build_cfg_posix   = 1
 
@@ -54,9 +60,9 @@ build_tool_msbuild = ${build_tool_dir_ms}/msbuild.exe
 ########################
 # Compile Flags
 ########################
-#build_run_a        =
-build_run_so       =
-build_run_test     =
+#build_run_a        = 1
+build_run_so       = 1
+build_run_test     = 1
 
 build_opt_a_pre    = alib
 build_opt_a_ext    = a
@@ -64,9 +70,9 @@ build_opt_so_pre   =
 build_opt_so_ext   = dll
 build_opt_exe_ext  = .exe
 
-build_opt_c        = -m32 -march=i686 -g -Wall -Wextra -Wdeclaration-after-statement -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-build_opt_cxx      = -m32 -march=i686 -g -Wall -Wextra -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-build_opt_ld       = -m32 -march=i686 -g -Wl,--no-undefined
+build_opt_c        = -g -Wall -Wextra -Wdeclaration-after-statement -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+build_opt_cxx      = -g -Wall -Wextra -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+build_opt_ld       = -g -Wl,--no-undefined
 build_opt_ld_so    = -shared -Wl,-soname,
 build_opt_ld_rpath = -Wl,-rpath-link,
 build_opt_ld_noud  = -Wl,--no-undefined
@@ -83,6 +89,8 @@ build_opt_libexe   =
 ########################
 
 build_xibase_src_bin    =
+build_xibase_src_mk     = $(wildcard $(basedir)/src/base/src/_all/*.c)
+build_xibase_src_mk    += $(wildcard $(basedir)/src/base/src/win32/*.c)
 build_xibase_src_in     = _all/*.c, win32/*.c
 build_xibase_src_ex     = 
 build_xibase_inc_dir    = -I${basedir}/include
@@ -91,6 +99,7 @@ build_xibase_lib_mod    = -lws2_32 -lmswsock -luserenv
 build_xibase_dlldef     = ${basedir}/src/base/xibase.def
 
 buildtc_xibase_src_bin  = tc_main.c
+buildtc_xibase_src_mk     = $(wildcard $(basedir)/src/base/test/*.c)
 buildtc_xibase_src_in   = *.c
 buildtc_xibase_src_ex   = tc_main.c
 buildtc_xibase_inc_dir  = -I${basedir}/include
@@ -105,9 +114,8 @@ buildtc_xibase_dlldef   = ${basedir}/src/base/xibasetest.def
 
 build_ext_zlib_dlldef    = ${basedir}/external/zlib/zlib.def
 
-build_ext_ffi_dlldef     = 
-#${basedir}/external/libffi/ffi32.def
-build_ext_ffi_srcdep     = win32
+build_ext_ffi_dlldef     = ${basedir}/external/libffi/ffi64.def
+build_ext_ffi_srcdep     = win64
 
 #build_ext_iconv_dlldef   = ${basedir}/external/libiconv/iconv.def
 #build_ext_iconv_run      =
@@ -119,8 +127,9 @@ build_ext_png_dlldef     = ${basedir}/external/libpng/png.def
 build_ext_ft_dlldef      = ${basedir}/external/freetype/freetype.def
 build_ext_ft_flags       = -DFT2_BUILD_LIBRARY
 
-build_ext_icu4c_flags    = -DU_WINDOWS -DU_STATIC_IMPLEMENTATION
+build_ext_icu4c_flags    = -DU_WINDOWS
 build_ext_icuuc_dlldef   = ${basedir}/external/icu4c/icuuc.def
 build_ext_icui18n_dlldef = ${basedir}/external/icu4c/icui18n.def
 
 build_java_jcl_dlldef    = ${basedir}/java/jcl/jcl.def
+

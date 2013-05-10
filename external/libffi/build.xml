@@ -25,9 +25,9 @@
 	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
 		<echo>Warning : you are here without proper command!!!!</echo>
 		<property environment="env" />
-		<property file="${basedir}/buildx/ant/project.properties" />
-		<property file="${basedir}/buildx/ant/java.properties" />
-		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<property file="${basedir}/buildx/antmk/project.mk" />
+		<property file="${basedir}/buildx/antmk/java.mk" />
+		<property file="${basedir}/buildx/antmk/build_${project_def_target}.mk" />
 		<property name="ant_cfg_target" value="${project_def_target}" />
 		<property name="ant_cfg_issetTarget" value="true" />
 	</target>

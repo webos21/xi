@@ -52,18 +52,18 @@
 	</target>
 
 	<!-- PREPARE : Load Properties -->
-	<!-- you can define additional properties in [build_target.properties]!!!      -->
+	<!-- you can define additional properties in [build_target.mk]!!!      -->
 	<target name="_prepare.load.def" depends="_prepare.antcfg">
-		<property file="${basedir}/buildx/ant/project.properties" />
-		<property file="${basedir}/buildx/ant/java.properties" />
+		<property file="${basedir}/buildx/antmk/project.mk" />
+		<property file="${basedir}/buildx/antmk/java.mk" />
 	</target>
 	<target name="_prepare.load.buildprop" depends="_prepare.load.def" if="ant_cfg_issetTarget">
-		<echo>Load the request properties - [${basedir}/buildx/ant/build_${ant_cfg_target}.properties]</echo>
-		<property file="${basedir}/buildx/ant/build_${ant_cfg_target}.properties" />
+		<echo>Load the request properties - [${basedir}/buildx/antmk/build_${ant_cfg_target}.mk]</echo>
+		<property file="${basedir}/buildx/antmk/build_${ant_cfg_target}.mk" />
 	</target>
 	<target name="_prepare.load.defprop" depends="_prepare.load.def" unless="ant_cfg_issetTarget">
-		<echo>Load the default properties - [${basedir}/buildx/ant/build_${project_def_target}.properties]</echo>
-		<property file="${basedir}/buildx/ant/build_${project_def_target}.properties" />
+		<echo>Load the default properties - [${basedir}/buildx/antmk/build_${project_def_target}.mk]</echo>
+		<property file="${basedir}/buildx/antmk/build_${project_def_target}.mk" />
 		<property name="ant_cfg_target" value="${project_def_target}" />
 		<property name="ant_cfg_issetTarget" value="true" />
 	</target>

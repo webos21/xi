@@ -3,3 +3,6 @@
 /.project
 /ant
 /Debug
+/.settings
+/.cproject
+/amk
