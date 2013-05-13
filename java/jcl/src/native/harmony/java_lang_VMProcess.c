@@ -41,7 +41,7 @@
  #include "gnu_java_nio_FileChannelImpl.h"
  */
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>

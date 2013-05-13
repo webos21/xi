@@ -40,7 +40,7 @@
 
 // by jshwang
 //#include "stdint.h"
-// by cmcho
+// by cmjo
 //#define LOGW printf
 //#include <assert.h>
 #include <errno.h>
@@ -49,11 +49,11 @@
 //#include <stdio.h>
 #include <stdlib.h>
 //#include <string.h>
-// by cmcho
+// by cmjo
 //#include <sys/ioctl.h>
 //#include <sys/stat.h>
 //#include <sys/types.h>
-// by cmcho
+// by cmjo
 //#include <sys/uio.h>
 //#include <unistd.h>
 
@@ -63,7 +63,7 @@
 #include "xi/xi_string.h"
 #include "xi/xi_sysinfo.h"
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 #if HAVE_SYS_SENDFILE_H
 #include <sys/sendfile.h>
 #else

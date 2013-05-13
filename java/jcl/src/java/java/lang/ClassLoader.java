@@ -1059,7 +1059,7 @@ public abstract class ClassLoader {
 				if (files != null)
 					for (int i = 0; i < files.length; i++)
 						list.add(files[i].toURI().toURL());
-				// list.add(files[i].toURL()); // changed by cmcho
+				// list.add(files[i].toURL()); // changed by cmjo
 			} catch (Exception x) {
 			}
 		}
@@ -1071,7 +1071,7 @@ public abstract class ClassLoader {
 	private static void addFileURL(ArrayList list, String file) {
 		try {
 			list.add(new File(file).toURI().toURL());
-			// list.add(new File(file).toURL()); // changed by cmcho
+			// list.add(new File(file).toURL()); // changed by cmjo
 		} catch (java.net.MalformedURLException x) {
 		}
 	}

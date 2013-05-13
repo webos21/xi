@@ -146,7 +146,7 @@ public class PlainSocketImpl extends SocketImpl {
 
 	@Override
 	protected synchronized int available() throws IOException {
-		// checkNotClosed(); // Why is it needed??? - by cmcho
+		// checkNotClosed(); // Why is it needed??? - by cmjo
 		// we need to check if the input has been shutdown. If so
 		// we should return that there is no data to be read
 		if (shutdownInput) {

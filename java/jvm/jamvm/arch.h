@@ -28,7 +28,7 @@
 #define DEFAULT_MAX_HEAP 8*MB
 #define DEFAULT_MIN_HEAP 1*MB
 
-#define FFI_RET_EXTEND // added by cmcho
+#define FFI_RET_EXTEND // added by cmjo
 
 #define HANDLER_TABLE_T static const void
 #define DOUBLE_1_BITS 0x3ff0000000000000LL

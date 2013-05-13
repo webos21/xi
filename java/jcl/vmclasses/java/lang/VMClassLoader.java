@@ -132,7 +132,7 @@ final class VMClassLoader {
 			String url = getBootClassPathResource(name, i);
 			if (url != null)
 				try {
-					// XXX : added by cmcho - for Win32
+					// XXX : added by cmjo - for Win32
 					if (File.separatorChar != '/') {
 						url = url.replace(File.separatorChar, '/');
 						url = url.replace("jar:file://", "jar:file:///");

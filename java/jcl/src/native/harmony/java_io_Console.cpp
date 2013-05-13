@@ -23,7 +23,7 @@
 
 #include "xi/xi_log.h"
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>

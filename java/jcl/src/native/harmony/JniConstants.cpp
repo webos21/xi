@@ -16,7 +16,7 @@
 
 #include "JniConstants.h"
 
-// by cmcho
+// by cmjo
 //#include <stdlib.h>
 
 #include "xi/xi_process.h"

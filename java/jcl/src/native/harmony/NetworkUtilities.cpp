@@ -20,7 +20,7 @@
 #include "JNIHelp.h"
 #include "JniConstants.h"
 
-// by cmcho
+// by cmjo
 //#include <arpa/inet.h>
 //#include <fcntl.h>
 //#include <stdio.h>

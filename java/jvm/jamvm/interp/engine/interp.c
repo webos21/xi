@@ -949,7 +949,7 @@ xuintptr *executeJava() {
 			OPC_fp2long(double);
 	)
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 	DEF_OPC_210(OPC_I2L,
 			PUSH_LONG(STACK_POP(int), 1);
 	)

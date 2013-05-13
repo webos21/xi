@@ -43,7 +43,7 @@ public class SimpleFormatter extends Formatter {
 	@Override
 	public String format(LogRecord r) {
 		StringBuilder sb = new StringBuilder();
-		// edited by cmcho
+		// edited by cmjo
 		// sb.append(MessageFormat.format("{0, date} {0, time} ",
 		// new Object[] { new Date(r.getMillis()) }));
 		// sb.append(r.getSourceClassName()).append(" ");

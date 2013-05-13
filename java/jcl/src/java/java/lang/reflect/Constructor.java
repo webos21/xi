@@ -432,7 +432,7 @@ public final class Constructor<T> extends AccessibleObject implements
 		return cons.getDeclaredAnnotations();
 	}
 
-	// added by cmcho - 2011/10/05
+	// added by cmjo - 2011/10/05
 	public String getSignature() {
 		String signature = cons.getSignature();
 		if (signature == null) {

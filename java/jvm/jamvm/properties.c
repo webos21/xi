@@ -249,7 +249,7 @@ void addDefaultProperties(Object *properties) {
 	setUserDirProperty(properties);
 	setLocaleProperties(properties);
 
-	// added by cmcho
+	// added by cmjo
 	{
 		xchar proot[256];
 

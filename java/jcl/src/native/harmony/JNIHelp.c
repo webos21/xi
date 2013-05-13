@@ -24,7 +24,7 @@
  #include "utils/Log.h"
  */
 
-// by cmcho
+// by cmjo
 //#define LOGE printf
 //#define LOGW printf
 //
@@ -295,7 +295,7 @@ const char* jniStrError(int errnum, char* buf, size_t buflen) {
 	/* note: glibc has a nonstandard strerror_r that returns char* rather
 	 * than POSIX's int.
 	 * char *strerror_r(int errnum, char *buf, size_t n); */
-	// FIXME - cmcho
+	// FIXME - cmjo
 	//    char* ret = (char*) strerror_r(errnum, buf, buflen);
 	//    if (((int)ret) == 0) {
 	//        /* POSIX strerror_r, success */

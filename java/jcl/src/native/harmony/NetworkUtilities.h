@@ -16,7 +16,7 @@
 
 #include "jni.h"
 
-// by cmcho
+// by cmjo
 //#include <sys/socket.h>
 #include "xi/xi_socket.h"
 

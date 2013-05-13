@@ -33,7 +33,7 @@
 #include "xi/xi_select.h"
 #include "xi/xi_poll.h"
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>

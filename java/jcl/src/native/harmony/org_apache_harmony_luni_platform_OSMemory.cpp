@@ -24,7 +24,7 @@
 //#include <errno.h>
 //#include <stdlib.h>
 //#include <string.h>
-// by cmcho
+// by cmjo
 //#include <sys/mman.h>
 
 #include "xi/xi_log.h"

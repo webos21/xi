@@ -43,7 +43,7 @@
 //#include <ifaddrs.h>
 //#endif
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 // Ensures we always call freeifaddrs(3) to clean up after getifaddrs(3).
 class ScopedInterfaceAddresses {
 public:
@@ -92,7 +92,7 @@ static jobject makeInterfaceAddress(JNIEnv* env, jint interfaceIndex, ifaddrs* i
 			interfaceIndex, javaName, javaAddress, javaMask);
 }
 
-#endif // 0 - by cmcho
+#endif // 0 - by cmjo
 //static jobjectArray NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv* env, jclass) {
 JNIEXPORT jobjectArray JNICALL
 Java_java_net_NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv* env, jclass) {
@@ -151,7 +151,7 @@ Java_java_net_NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv* env, jclass)
 	return NULL;
 }
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 static bool doIoctl(JNIEnv* env, jstring name, int request, ifreq& ifr) {
 	// Copy the name into the ifreq structure, if there's room...
 	jsize nameLength = env->GetStringLength(name);
@@ -182,7 +182,7 @@ static jboolean hasFlag(JNIEnv* env, jstring name, int flag) {
 	doIoctl(env, name, SIOCGIFFLAGS, ifr); // May throw.
 	return (ifr.ifr_flags & flag) != 0;
 }
-#endif // 0 - by cmcho
+#endif // 0 - by cmjo
 //static jbyteArray NetworkInterface_getHardwareAddressImpl(JNIEnv* env, jclass, jstring name) {
 JNIEXPORT jbyteArray JNICALL
 Java_java_net_NetworkInterface_getHardwareAddressImpl(JNIEnv* env, jclass,

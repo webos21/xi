@@ -770,7 +770,7 @@ public final class Field extends AccessibleObject implements Member {
 		return f.getDeclaredAnnotations();
 	}
 
-	// added by cmcho - 2011/10/05
+	// added by cmjo - 2011/10/05
 	public String getSignature() {
 		String signature = f.getSignature();
 		if (signature == null) {

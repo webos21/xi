@@ -205,7 +205,7 @@ public class File implements Serializable, Comparable<File> {
 			String userDir = AccessController
 					.doPrivileged(new PriviAction<String>("user.dir"));
 
-			// Added by cmcho - for Changing Context Root Path {{
+			// Added by cmjo - for Changing Context Root Path {{
 			ThreadGroup tg = Thread.currentThread().getThreadGroup();
 			if (tg instanceof FilePathRefThreadGroup) {
 				FilePathRefThreadGroup fprtg = (FilePathRefThreadGroup) tg;
@@ -227,7 +227,7 @@ public class File implements Serializable, Comparable<File> {
 
 	// Removes duplicate adjacent slashes and any trailing slash.
 	private String fixSlashes(String origPath) {
-		// added by cmcho - avoid win32 URI exception
+		// added by cmjo - avoid win32 URI exception
 		if (origPath.charAt(0) == '/' && origPath.charAt(2) == ':') {
 			origPath = origPath.substring(1);
 		}

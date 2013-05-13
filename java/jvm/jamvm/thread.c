@@ -679,7 +679,7 @@ void detachThread(Thread *thread) {
 	 longer reachable. */
 
 #if 1
-	// added by cmcho  {{
+	// added by cmjo  {{
 	xi_thread_cond_destroy(&thread->wait_cv);
 	xi_thread_cond_destroy(&thread->park_cv);
 	xi_thread_mutex_destroy(&thread->park_lock);

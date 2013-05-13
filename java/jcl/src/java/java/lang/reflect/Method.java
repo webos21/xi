@@ -477,7 +477,7 @@ public final class Method extends AccessibleObject implements Member,
 		return m.getDeclaredAnnotations();
 	}
 
-	// added by cmcho
+	// added by cmjo
 	public String getSignature() {
 		String signature = m.getSignature();
 		if (signature == null) {

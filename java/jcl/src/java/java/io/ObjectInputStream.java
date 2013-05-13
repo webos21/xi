@@ -1283,12 +1283,12 @@ public class ObjectInputStream extends InputStream implements ObjectInput,
 				// BEGIN android-added
 				ObjectStreamField field = classDesc.getField(fieldName);
 				// END android-added
-				// cmcho remove BEGIN -- Dead Code (fieldDesc cannot be null)
+				// cmjo remove BEGIN -- Dead Code (fieldDesc cannot be null)
 				//if (mustResolve && fieldDesc == null) {
 				//	setBack = true;
 				//	mustResolve = false;
 				//}
-				// cmcho remove END
+				// cmjo remove END
 				Object toSet;
 				if (fieldDesc != null && fieldDesc.isUnshared()) {
 					toSet = readUnshared();
@@ -2594,7 +2594,7 @@ public class ObjectInputStream extends InputStream implements ObjectInput,
 				// Use the first non-null ClassLoader on the stack. If null, use
 				// the system class loader
 
-				// editted by cmcho : 2011/10/05
+				// editted by cmjo : 2011/10/05
 				if (callerClassLoader != null) {
 					cls = Class.forName(className, true, callerClassLoader);
 				} else {

@@ -26,7 +26,7 @@
 
 #include <utime.h>
 
-#if 0 // by cmcho
+#if 0 // by cmjo
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
