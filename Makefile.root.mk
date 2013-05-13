@@ -100,5 +100,5 @@ do_build:
 
 
 clean: prepare
-	$(RM) "$(xi_root_target)"
+	$(RM) -rf "$(xi_root_target)"
 

@@ -18,7 +18,7 @@
 #----------------------------------------------------#
 # File    : Makefile                                 #
 # Version : 0.1.1                                    #
-# Desc    : [xi.external] Makefile                   #
+# Desc    : [xi.java] Makefile                       #
 #----------------------------------------------------#
 # History)                                           #
 #   - 2013/05/05 : Created by cmjo                   #
@@ -42,11 +42,11 @@ include $(basedir)/buildx/antmk/build_$(TARGET).mk
 endif
 
 # PREPARE : get current directory
-xi_external_abs   = $(CURDIR)
-xi_external_rel   = $(notdir $(xi_external_abs))
+xi_java_abs   = $(CURDIR)
+xi_java_rel   = $(notdir $(xi_java_abs))
 
 # PREPARE : set target directory
-xi_external_target = $(basedir)/amk/$(build_cfg_target)/$(xi_external_rel)
+xi_java_target = $(basedir)/amk/$(build_cfg_target)/$(xi_java_rel)
 
 
 ###################
@@ -57,27 +57,22 @@ all: prepare do_build
 
 prepare:
 	@echo $(need_warning)
-	@$(MKDIR) -p "$(xi_external_target)"
+	@$(MKDIR) -p "$(xi_java_target)"
 	@echo "================================================================"
 	@echo "TARGET                  : $(TARGET)"
 	@echo "----------------------------------------------------------------"
-	@echo "xi_external_abs         : $(xi_external_abs)"
-	@echo "xi_external_rel         : $(xi_external_rel)"
+	@echo "xi_java_abs             : $(xi_java_abs)"
+	@echo "xi_java_rel             : $(xi_java_rel)"
 	@echo "----------------------------------------------------------------"
-	@echo "xi_external_target      : $(xi_external_target)"	
+	@echo "xi_java_target          : $(xi_java_target)"	
 	@echo "================================================================"
 
 
 do_build:
-	$(MAKE) -C zlib TARGET=$(TARGET)
-	$(MAKE) -C libffi TARGET=$(TARGET)
-	$(TEST_VAR) "$(build_ext_iconv_run)" == "1" $(TEST_THEN) \
-		$(MAKE) -C libiconv TARGET=$(TARGET) \
-	$(TEST_END)
-	$(MAKE) -C libjpeg TARGET=$(TARGET)
-	$(MAKE) -C libpng TARGET=$(TARGET)
-	$(MAKE) -C freetype TARGET=$(TARGET)
-	$(MAKE) -C icu4c TARGET=$(TARGET)
+	$(MAKE) -C jvm TARGET=$(TARGET)
+	$(MAKE) -C jcl TARGET=$(TARGET)
+
 
 clean: prepare
-	$(RM) -rf "$(xi_external_target)"
+	$(RM) "$(xi_java_target)"
+

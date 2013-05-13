@@ -61,7 +61,7 @@
 		<!-- Options -->
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
-		<property name="module_build_src_ex" value="" />
+		<property name="module_build_src_ex" value="dlmalloc.c" />
 		<property name="module_build_incdirs" value="-I${current_dir_abs}/src  -I${current_dir_abs}/src/${build_ext_ffi_srcdep}" />
 		<property name="module_build_libdirs" value="" />
 		<property name="module_build_target_a" value="${build_opt_a_pre}ffi.${build_opt_a_ext}" />

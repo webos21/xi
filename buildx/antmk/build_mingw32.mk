@@ -114,12 +114,11 @@ buildtc_xibase_dlldef   = ${basedir}/src/base/xibasetest.def
 
 build_ext_zlib_dlldef    = ${basedir}/external/zlib/zlib.def
 
-build_ext_ffi_dlldef     = 
-#${basedir}/external/libffi/ffi32.def
+build_ext_ffi_dlldef     = ${basedir}/external/libffi/ffi32.def
 build_ext_ffi_srcdep     = win32
 
 #build_ext_iconv_dlldef   = ${basedir}/external/libiconv/iconv.def
-#build_ext_iconv_run      =
+#build_ext_iconv_run      = 1
 
 build_ext_jpeg_dlldef    = ${basedir}/external/libjpeg/jpeg.def
 

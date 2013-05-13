@@ -36,6 +36,7 @@ TAR = "tar.exe"
 CHMOD = echo "chmod"
 TEST_FILE = if EXIST
 TEST_DIR = if EXIST
+TEST_VAR = if
 TEST_THEN = 
 TEST_END =
 else
@@ -46,6 +47,7 @@ TAR = tar
 CHMOD = chmod
 TEST_FILE = if test -f
 TEST_DIR = if test -d
+TEST_VAR = if test
 TEST_THEN = ; then
 TEST_END = ; fi
 endif

@@ -200,7 +200,7 @@
 			<include name="**/*.java" />
 		</javac>
 		<copy todir="${module_dir_classes}">
-			<fileset dir="${current_dir_abs}/src/java" includes="**/*.mk" />
+			<fileset dir="${current_dir_abs}/src/java" includes="**/*.properties" />
 		</copy>
 		<jar destfile="${module_dir_target}/${module_build_target_jar}" basedir="${module_dir_classes}" />
 	</target>

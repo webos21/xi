@@ -24,7 +24,12 @@
 #   - 2011/06/15 : Created by cmjo                   #
 ######################################################
 
-java_opt_debug       = true
+java_home            = C:/DevSoft/Java/jdk1.7.0_05
+
+java_opt_debug       = -g:none
 java_opt_deprecation = false
 java_opt_optimize    = true
 java_opt_source      = 1.4
+
+build_tool_javac     = ${java_home}/bin/javac
+build_tool_jar       = ${java_home}/bin/jar

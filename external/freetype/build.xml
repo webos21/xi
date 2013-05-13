@@ -61,9 +61,9 @@
 		<!-- Options -->
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
-		<property name="module_build_src_ex" value="" />
+		<property name="module_build_src_ex" value="**/ttsbit0.c" />
 		<property name="module_build_incdirs" value="${build_ext_ft_flags} -I${current_dir_abs}/include" />
-		<property name="module_build_libdirs" value="-L${module_dir_output_lib}" />
+		<property name="module_build_libdirs" value="" />
 		<property name="module_build_target_a" value="${build_opt_a_pre}freetype.${build_opt_a_ext}" />
 		<property name="module_build_target_so" value="${build_opt_so_pre}freetype.${build_opt_so_ext}" />
 	</target>

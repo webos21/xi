@@ -73,5 +73,5 @@ do_build:
 
 
 clean: prepare
-	$(RM) "$(xi_src_target)"
+	$(RM) -rf "$(xi_src_target)"
 

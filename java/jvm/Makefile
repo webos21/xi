@@ -18,7 +18,7 @@
 #----------------------------------------------------#
 # File    : Makefile                                 #
 # Version : 0.1.1                                    #
-# Desc    : [xi.external.zlib] Makefile              #
+# Desc    : [xi.java.jvm] Makefile                   #
 #----------------------------------------------------#
 # History)                                           #
 #   - 2013/05/12 : Created by cmjo                   #
@@ -46,7 +46,7 @@ endif
 current_dir_abs        = $(CURDIR)
 current_dir_rel        = $(notdir $(current_dir_abs))
 # Base
-module_dir_target      = $(basedir)/amk/$(build_cfg_target)/external/$(current_dir_rel)
+module_dir_target      = $(basedir)/amk/$(build_cfg_target)/java/$(current_dir_rel)
 module_dir_object      = $(module_dir_target)/object
 # Output
 module_dir_output_base = $(basedir)/amk/$(build_cfg_target)/emul
@@ -57,17 +57,21 @@ module_dir_output_res  = $(module_dir_output_base)/res
 module_dir_output_test = $(module_dir_output_base)/test
 
 # PREPARE : Build Options
-module_build_src_bin   = 
-module_build_src_mk    = $(wildcard $(current_dir_abs)/src/*.c)
-module_build_src_ex    = 
-module_build_incdirs   = -I$(current_dir_abs)/include
-module_build_libdirs   = 
-module_build_target_a  = $(build_opt_a_pre)z.$(build_opt_a_ext)
-module_build_target_so = $(build_opt_so_pre)z.$(build_opt_so_ext)
+module_build_src_bin    = $(current_dir_abs)/launcher/jam.c
+module_build_src_mk     = $(wildcard $(current_dir_abs)/jamvm/*.c)
+module_build_src_mk    += $(wildcard $(current_dir_abs)/jamvm/interp/*.c)
+module_build_src_mk    += $(wildcard $(current_dir_abs)/jamvm/interp/engine/*.c)
+module_build_src_mk    += $(module_build_src_bin)
+module_build_src_ex     = 
+module_build_incdirs    = -I$(module_dir_output_inc) -I$(current_dir_abs)/jamvm
+module_build_libdirs    = -L$(module_dir_output_lib) -lz -lffi
+module_build_target_a   =
+module_build_target_so  =
+module_build_target_bin = jvm$(build_opt_exe_ext)
 
 # PREPARE : Set VPATH!!
 vpath
-vpath %.c $(current_dir_abs)/src
+vpath %.c $(current_dir_abs)/jamvm:$(current_dir_abs)/jamvm/interp:$(current_dir_abs)/jamvm/interp/engine:$(current_dir_abs)/launcher
 
 # PREPARE : Build Targets
 ifeq ($(build_run_a),1)
@@ -90,7 +94,7 @@ endif
 # build-targets
 ###################
 
-all: prepare $(module_target_static) $(module_target_shared) post
+all: prepare $(module_build_target_bin) post
 
 prepare_mkdir_base:
 	@$(MKDIR) -p "$(module_dir_target)"
@@ -114,7 +118,6 @@ prepare_result:
 	@echo "----------------------------------------------------------------"
 	@echo "module_dir_target       : $(module_dir_target)"	
 	@echo "module_dir_object       : $(module_dir_object)"	
-	@echo "module_dir_test         : $(module_dir_test)"	
 	@echo "----------------------------------------------------------------"
 	@echo "module_dir_output_base  : $(module_dir_output_base)"	
 	@echo "module_dir_output_bin   : $(module_dir_output_bin)"	
@@ -130,34 +133,26 @@ prepare_result:
 	@echo "module_build_libdirs    : $(module_build_libdirs)"	
 	@echo "module_build_target_a   : $(module_build_target_a)"	
 	@echo "module_build_target_so  : $(module_build_target_so)"	
+	@echo "module_build_target_bin : $(module_build_target_bin)"	
 	@echo "================================================================"
 
 prepare: prepare_mkdir_base prepare_mkdir_output prepare_result
 
 
-$(module_build_target_a): $(module_link_static)
+$(module_build_target_bin): $(module_link_shared)
 	@echo "================================================================"
-	@echo "BUILD : $(module_build_target_a)"
-	@echo "----------------------------------------------------------------"
-	$(build_tool_ar) rcu $(module_dir_target)/$(module_build_target_a) $(module_link_static)
-	$(build_tool_ranlib) $(module_dir_target)/$(module_build_target_a)
-	@echo "================================================================"
-
-
-$(module_build_target_so): $(module_link_shared)
-	@echo "================================================================"
-	@echo "BUILD : $(module_build_target_so)"
+	@echo "BUILD : $(module_build_target_bin)"
 	@echo "----------------------------------------------------------------"
 	$(build_tool_linker) \
 		$(build_opt_ld) \
-		$(build_opt_ld_so)$(module_build_target_so) \
-		-o $(module_dir_target)/$(module_build_target_so) \
+		-o $(module_dir_target)/$(module_build_target_bin) \
 		$(module_link_shared) \
 		$(module_build_libdirs) \
-		$(build_ext_zlib_dlldef) \
+		-lxibase \
 		$(build_opt_mnocyg) \
 		$(build_opt_libgcc) \
 		$(build_opt_libgxx)
+		$(build_opt_libexe)
 	@echo "================================================================"
 
 
@@ -165,12 +160,8 @@ post:
 	@echo "================================================================"
 	@echo "OUTPUT : $(current_dir_abs)"
 	@echo "----------------------------------------------------------------"
-	$(CP) $(current_dir_abs)/include/*.h $(module_dir_output_inc)
-	$(TEST_FILE) $(module_dir_target)/$(module_build_target_a) $(TEST_THEN) \
-		$(CP) $(module_dir_target)/$(module_build_target_a) $(module_dir_output_lib) \
-	$(TEST_END)
-	$(TEST_FILE) $(module_dir_target)/$(module_build_target_so) $(TEST_THEN) \
-		$(CP) $(module_dir_target)/$(module_build_target_so) $(module_dir_output_lib) \
+	$(TEST_FILE) $(module_dir_target)/$(module_build_target_bin) $(TEST_THEN) \
+		$(CP) $(module_dir_target)/$(module_build_target_bin) $(module_dir_output_bin) \
 	$(TEST_END)
 	@echo "================================================================"
 

@@ -18,10 +18,10 @@
 #----------------------------------------------------#
 # File    : Makefile                                 #
 # Version : 0.1.1                                    #
-# Desc    : [xi.src.base] Makefile.                  #
+# Desc    : [xi.external.libpng] Makefile            #
 #----------------------------------------------------#
 # History)                                           #
-#   - 2013/05/05 : Created by cmjo                   #
+#   - 2013/05/12 : Created by cmjo                   #
 ######################################################
 
 # PREPARE : set base
@@ -46,9 +46,8 @@ endif
 current_dir_abs        = $(CURDIR)
 current_dir_rel        = $(notdir $(current_dir_abs))
 # Base
-module_dir_target      = $(basedir)/amk/$(build_cfg_target)/xi/$(current_dir_rel)
+module_dir_target      = $(basedir)/amk/$(build_cfg_target)/external/$(current_dir_rel)
 module_dir_object      = $(module_dir_target)/object
-module_dir_test        = $(module_dir_target)/test
 # Output
 module_dir_output_base = $(basedir)/amk/$(build_cfg_target)/emul
 module_dir_output_bin  = $(module_dir_output_base)/bin
@@ -58,55 +57,32 @@ module_dir_output_res  = $(module_dir_output_base)/res
 module_dir_output_test = $(module_dir_output_base)/test
 
 # PREPARE : Build Options
-module_build_src_bin   = $(build_xibase_src_bin)
-module_build_src_mk    = $(build_xibase_src_mk)
-module_build_src_ex    = $(build_xibase_src_ex)
-module_build_incdirs   = $(build_xibase_inc_dir)
-module_build_libdirs   = $(build_xibase_lib_dir)
-module_build_target_a  = $(build_opt_a_pre)xibase.$(build_opt_a_ext)
-module_build_target_so = $(build_opt_so_pre)xibase.$(build_opt_so_ext)
-
-module_test_src_bin    = $(buildtc_xibase_src_bin)
-module_test_src_mk     = $(buildtc_xibase_src_mk)
-module_test_src_ex     = $(buildtc_xibase_src_ex)
-module_test_incdirs    = $(buildtc_xibase_inc_dir)
-module_test_libdirs    = $(buildtc_xibase_lib_dir)
-module_test_target_a   = $(buildtc_opt_a_pre)xibasetest.$(build_opt_a_ext)
-module_test_target_so  = $(buildtc_opt_so_pre)xibasetest.$(build_opt_so_ext)
-module_test_target_bin = xibase$(build_opt_exe_ext)
+module_build_src_bin   = 
+module_build_src_mk    = $(wildcard $(current_dir_abs)/src/*.c)
+module_build_src_ex    = 
+module_build_incdirs   = -I$(current_dir_abs)/include -I$(current_dir_abs)/src -I$(module_dir_output_inc)
+module_build_libdirs   = -L$(module_dir_output_lib) -lz
+module_build_target_a  = $(build_opt_a_pre)png.$(build_opt_a_ext)
+module_build_target_so = $(build_opt_so_pre)png.$(build_opt_so_ext)
 
 # PREPARE : Set VPATH!!
 vpath
-ifeq ($(build_cfg_mingw), 1)
-vpath %.c $(current_dir_abs)/src/_all:$(current_dir_abs)/src/win32:$(current_dir_abs)/test
-else
-vpath %.c $(current_dir_abs)/src/_all:$(current_dir_abs)/src/posix:$(current_dir_abs)/test
-endif
+vpath %.c $(current_dir_abs)/src
 
 # PREPARE : Build Targets
 ifeq ($(build_run_a),1)
-module_objs_a_tmp0     = $(patsubst $(basedir)/src/base/src/$(module_build_src_ex),,$(module_build_src_mk))
-module_objs_static     = $(patsubst %.c,%.o,$(module_objs_a_tmp0))
+module_objs_a_tmp0     = 
+module_objs_static     = $(patsubst %.c,%.o,$(module_build_src_mk))
 module_link_a_tmp1     = $(notdir $(module_objs_static))
 module_link_static     = $(addprefix $(module_dir_object)/,$(module_link_a_tmp1))
 module_target_static   = $(module_build_target_a)
 endif
 ifeq ($(build_run_so),1)
-module_objs_so_tmp0    = $(patsubst $(basedir)/src/base/src/$(module_build_src_ex),,$(module_build_src_mk))
-module_objs_shared     = $(patsubst %.c,%.lo,$(module_objs_so_tmp0))
+module_objs_so_tmp0    = 
+module_objs_shared     = $(patsubst %.c,%.lo,$(module_build_src_mk))
 module_link_so_tmp1    = $(notdir $(module_objs_shared))
 module_link_shared     = $(addprefix $(module_dir_object)/,$(module_link_so_tmp1))
 module_target_shared   = $(module_build_target_so)
-endif
-ifeq ($(build_run_test),1)
-module_objs_test_tmp0  = $(patsubst $(basedir)/src/base/test/$(module_test_src_ex),,$(module_test_src_mk))
-module_objs_tstatic    = $(patsubst %.c,%.o,$(module_objs_test_tmp0))
-module_link_test_tmp1  = $(notdir $(module_objs_tstatic))
-module_link_tstatic    = $(addprefix $(module_dir_test)/,$(module_link_test_tmp1))
-module_objs_tshared    = $(patsubst %.c,%.lo,$(module_objs_test_tmp0))
-module_link_test_tmp2  = $(notdir $(module_objs_tshared))
-module_link_tshared    = $(addprefix $(module_dir_test)/,$(module_link_test_tmp2))
-module_target_test     = $(module_test_target_bin)
 endif
 
 
@@ -114,12 +90,11 @@ endif
 # build-targets
 ###################
 
-all: prepare $(module_target_static) $(module_target_shared) $(module_target_test) post
+all: prepare $(module_target_static) $(module_target_shared) post
 
 prepare_mkdir_base:
 	@$(MKDIR) -p "$(module_dir_target)"
 	@$(MKDIR) -p "$(module_dir_object)"
-	@$(MKDIR) -p "$(module_dir_test)"
 
 prepare_mkdir_output:
 	@$(MKDIR) -p "$(module_dir_output_base)"
@@ -155,15 +130,6 @@ prepare_result:
 	@echo "module_build_libdirs    : $(module_build_libdirs)"	
 	@echo "module_build_target_a   : $(module_build_target_a)"	
 	@echo "module_build_target_so  : $(module_build_target_so)"	
-	@echo "----------------------------------------------------------------"
-	@echo "module_test_src_bin     : $(module_test_src_bin)"	
-	@echo "module_test_src_mk      : $(module_test_src_mk)"	
-	@echo "module_test_src_ex      : $(module_test_src_ex)"	
-	@echo "module_test_incdirs     : $(module_test_incdirs)"	
-	@echo "module_test_libdirs     : $(module_test_libdirs)"	
-	@echo "module_test_target_a    : $(module_test_target_a)"	
-	@echo "module_test_target_so   : $(module_test_target_so)"
-	@echo "module_test_target_bin  : $(module_test_target_bin)"
 	@echo "================================================================"
 
 prepare: prepare_mkdir_base prepare_mkdir_output prepare_result
@@ -188,56 +154,10 @@ $(module_build_target_so): $(module_link_shared)
 		-o $(module_dir_target)/$(module_build_target_so) \
 		$(module_link_shared) \
 		$(module_build_libdirs) \
-		$(build_xibase_lib_mod) \
-		$(build_xibase_dlldef) \
+		$(build_ext_png_dlldef) \
 		$(build_opt_mnocyg) \
 		$(build_opt_libgcc) \
 		$(build_opt_libgxx)
-	@echo "================================================================"
-
-
-$(module_test_target_a): $(module_link_tstatic)
-	@echo "================================================================"
-	@echo "BUILD : $(module_test_target_a)"
-	@echo "----------------------------------------------------------------"
-	$(build_tool_ar) rcu $(module_dir_test)/$(module_test_target_a) $(module_link_tstatic)
-	$(build_tool_ranlib) $(module_dir_test)/$(module_test_target_a)
-	@echo "================================================================"
-
-
-$(module_test_target_so): $(module_link_tshared)
-	@echo "================================================================"
-	@echo "BUILD : $(module_test_target_so)"
-	@echo "----------------------------------------------------------------"
-	$(build_tool_linker) \
-		$(build_opt_ld) \
-		$(build_opt_ld_so)$(module_test_target_so) \
-		-o $(module_dir_target)/$(module_test_target_so) \
-		$(module_link_tshared) \
-		$(module_test_libdirs) -L$(module_dir_target)\
-		$(buildtc_xibase_lib_mod) \
-		$(buildtc_xibase_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
-	@echo "================================================================"
-
-
-$(module_test_target_bin): $(module_test_target_so)
-	@echo "================================================================"
-	@echo "BUILD : $(module_test_target_bin)"
-	@echo "----------------------------------------------------------------"
-	$(build_tool_linker) \
-		$(build_opt_ld) \
-		-o $(module_dir_target)/$(module_test_target_bin) \
-		$(module_link_tshared) \
-		$(module_test_incdirs) \
-		$(module_test_libdirs) -L$(module_dir_target)\
-		$(buildtc_xibase_lib_mod) -lxibasetest \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx) \
-		$(current_dir_abs)/test/$(module_test_src_bin)
 	@echo "================================================================"
 
 
@@ -245,23 +165,12 @@ post:
 	@echo "================================================================"
 	@echo "OUTPUT : $(current_dir_abs)"
 	@echo "----------------------------------------------------------------"
-	$(CP) -R $(basedir)/include/* $(module_dir_output_inc)
+	$(CP) $(current_dir_abs)/include/*.h $(module_dir_output_inc)
 	$(TEST_FILE) $(module_dir_target)/$(module_build_target_a) $(TEST_THEN) \
 		$(CP) $(module_dir_target)/$(module_build_target_a) $(module_dir_output_lib) \
 	$(TEST_END)
 	$(TEST_FILE) $(module_dir_target)/$(module_build_target_so) $(TEST_THEN) \
 		$(CP) $(module_dir_target)/$(module_build_target_so) $(module_dir_output_lib) \
-	$(TEST_END)
-	$(CP) -R $(basedir)/lib/$(build_cfg_target)/* $(module_dir_output_base)
-	$(CP) -R $(basedir)/res/* $(module_dir_output_res)
-	$(TEST_FILE) $(module_dir_target)/$(module_test_target_a) $(TEST_THEN) \
-		$(CP) $(module_dir_target)/$(module_test_target_a) $(module_dir_output_test) \
-	$(TEST_END)
-	$(TEST_FILE) $(module_dir_target)/$(module_test_target_so) $(TEST_THEN) \
-		$(CP) $(module_dir_target)/$(module_test_target_so) $(module_dir_output_test) \
-	$(TEST_END)
-	$(TEST_FILE) $(module_dir_target)/$(module_test_target_bin) $(TEST_THEN) \
-		$(CP) $(module_dir_target)/$(module_test_target_bin) $(module_dir_output_test) \
 	$(TEST_END)
 	@echo "================================================================"
 
@@ -279,10 +188,4 @@ $(module_dir_object)/%.o: %.c
 
 $(module_dir_object)/%.lo: %.c
 	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs) -o $@ $<
-
-$(module_dir_test)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_test_incdirs) -o $@ $<
-
-$(module_dir_test)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_test_incdirs) -o $@ $<
 
