@@ -183,7 +183,7 @@ Java_libcore_icu_TimeZones_getZoneStringsImpl(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "libcore/icu/TimeZones", gMethods, NELEM(gMethods));
  }
  */
-int register_libcore_icu_TimeZones(JNIEnv* env) {
+int register_libcore_icu_TimeZones(JNIEnv*) {
 	return JNI_OK;
 }
 

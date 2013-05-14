@@ -63,16 +63,16 @@
 		<property name="module_build_src_bin" value="${build_xibase_src_bin}" />
 		<property name="module_build_src_in" value="${build_xibase_src_in}" />
 		<property name="module_build_src_ex" value="${build_xibase_src_ex}" />
-		<property name="module_build_incdirs" value="${build_xibase_inc_dir}" />
-		<property name="module_build_libdirs" value="${build_xibase_lib_dir}" />
+		<property name="module_build_cflags" value="${build_xibase_cflags}" />
+		<property name="module_build_ldflags" value="${build_xibase_ldflags}" />
 		<property name="module_build_target_a" value="${build_opt_a_pre}xibase.${build_opt_a_ext}" />
 		<property name="module_build_target_so" value="${build_opt_so_pre}xibase.${build_opt_so_ext}" />
 
 		<property name="module_test_src_bin" value="${buildtc_xibase_src_bin}" />
 		<property name="module_test_src_in" value="${buildtc_xibase_src_in}" />
 		<property name="module_test_src_ex" value="${buildtc_xibase_src_ex}" />
-		<property name="module_test_incdirs" value="${buildtc_xibase_inc_dir}" />
-		<property name="module_test_libdirs" value="${buildtc_xibase_lib_dir}" />
+		<property name="module_test_cflags" value="${buildtc_xibase_cflags}" />
+		<property name="module_test_ldflags" value="-L${module_dir_target} ${buildtc_xibase_ldflags}" />
 		<property name="module_test_target_a" value="${build_opt_a_pre}xibasetest.${build_opt_a_ext}" />
 		<property name="module_test_target_so" value="${build_opt_so_pre}xibasetest.${build_opt_so_ext}" />
 		<property name="module_test_target_bin" value="xibasetest${build_opt_exe_ext}" />
@@ -100,16 +100,16 @@
 		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
 		<echo>module_build_src_in     : ${module_build_src_in}</echo>
 		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
-		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
-		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
+		<echo>module_build_cflags     : ${module_build_cflags}</echo>
+		<echo>module_build_ldflags    : ${module_build_ldflags}</echo>
 		<echo>module_build_target_a   : ${module_build_target_a}</echo>
 		<echo>module_build_target_so  : ${module_build_target_so}</echo>
 		<echo>----------------------------------------------------------------</echo>
 		<echo>module_test_src_bin     : ${module_test_src_bin}</echo>
 		<echo>module_test_src_in      : ${module_test_src_in}</echo>
 		<echo>module_test_src_ex      : ${module_test_src_ex}</echo>
-		<echo>module_test_incdirs     : ${module_test_incdirs}</echo>
-		<echo>module_test_libdirs     : ${module_test_libdirs}</echo>
+		<echo>module_test_cflags      : ${module_test_cflags}</echo>
+		<echo>module_test_ldflags     : ${module_test_ldflags}</echo>
 		<echo>module_test_target_a    : ${module_test_target_a}</echo>
 		<echo>module_test_target_so   : ${module_test_target_so}</echo>
 		<echo>module_test_target_bin  : ${module_test_target_bin}</echo>
@@ -124,8 +124,8 @@
 	<target name="_build.xibase.o" depends="_prepare" if="build_run_a">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -140,8 +140,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -170,12 +170,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_so}" />
 			<srcfile />
-			<arg line="${module_build_libdirs}" />
-			<arg line="${build_xibase_lib_mod}" />
-			<arg line="${build_xibase_dlldef}" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${module_dir_object}" includes="*.lo" />
 		</apply>
 	</target>
@@ -185,8 +181,8 @@
 	<target name="_build.test.o" depends="_prepare" if="build_run_test">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_test}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_test_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_test_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -201,8 +197,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_test}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_test_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_test_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -231,14 +227,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_test_target_so}" />
 			<srcfile />
-			<arg line="${module_test_libdirs}" />
-			<!-- add module target directory to Library reference -->
-			<arg line="-L${module_dir_target}" />
-			<arg line="${buildtc_xibase_lib_mod}" />
-			<arg line="${buildtc_xibase_dlldef}" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_test_ldflags}" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${module_dir_test}" includes="*.lo" />
 		</apply>
 	</target>
@@ -248,16 +238,12 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_test_target_bin}" />
 			<srcfile />
-			<arg line="${module_test_incdirs}" />
-			<arg line="${module_test_libdirs}" />
+			<arg line="${module_test_cflags}" />
 			<!-- add module target directory to Library reference -->
 			<arg line="-L${module_dir_target}" />
-			<arg line="${buildtc_xibase_lib_mod}" />
 			<!-- add test module to including library -->
-			<arg line="-lxibasetest" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="-lxibase -lxibasetest" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${current_dir_abs}/test" includes="${module_test_src_bin}" />
 		</apply>
 	</target>

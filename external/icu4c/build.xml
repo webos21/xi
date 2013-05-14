@@ -70,9 +70,10 @@
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
 		<property name="module_build_src_ex" value="" />
-		<property name="module_build_incdirs_icuuc" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n '-DICU_DATA_DIR_PREFIX_ENV_VAR=${module_inc_tmp01}' '-DICU_DATA_DIR=${module_inc_tmp02}' -DU_COMMON_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_flags} " />
-		<property name="module_build_incdirs_icui18n" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n -DU_I18N_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_flags} " />
-		<property name="module_build_libdirs" value="" />
+		<property name="module_build_cflags_icuuc" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n '-DICU_DATA_DIR_PREFIX_ENV_VAR=${module_inc_tmp01}' '-DICU_DATA_DIR=${module_inc_tmp02}' -DU_COMMON_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_cflags} " />
+		<property name="module_build_cflags_icui18n" value="-I${current_dir_abs}/common -I${current_dir_abs}/i18n -DU_I18N_IMPLEMENTATION -DHAVE_ANDROID_OS ${build_ext_icu4c_cflags} " />
+		<property name="module_build_ldflags_icuuc" value="${build_ext_icu4c_ldf_uc}" />
+		<property name="module_build_ldflags_icui18n" value="-L${module_dir_target} -licuuc ${build_ext_icu4c_ldf_i18n}" />
 		<property name="module_build_target_a_icuuc" value="${build_opt_a_pre}icuuc.${build_opt_a_ext}" />
 		<property name="module_build_target_a_icui18n" value="${build_opt_a_pre}icui18n.${build_opt_a_ext}" />
 		<property name="module_build_target_so_icuuc" value="${build_opt_so_pre}icuuc.${build_opt_so_ext}" />
@@ -103,9 +104,10 @@
 		<echo>module_build_src_bin           : ${module_build_src_bin}</echo>
 		<echo>module_build_src_in            : ${module_build_src_in}</echo>
 		<echo>module_build_src_ex            : ${module_build_src_ex}</echo>
-		<echo>module_build_incdirs_icuuc     : ${module_build_incdirs_icuuc}</echo>
-		<echo>module_build_incdirs_icui18n   : ${module_build_incdirs_icui18n}</echo>
-		<echo>module_build_libdirs           : ${module_build_libdirs}</echo>
+		<echo>module_build_cflags_icuuc      : ${module_build_cflags_icuuc}</echo>
+		<echo>module_build_cflags_icui18n    : ${module_build_cflags_icui18n}</echo>
+		<echo>module_build_ldflags_icuuc     : ${module_build_ldflags_icuuc}</echo>
+		<echo>module_build_ldflags_icui18n   : ${module_build_ldflags_icui18n}</echo>
 		<echo>module_build_target_a_icuuc    : ${module_build_target_a_icuuc}</echo>
 		<echo>module_build_target_a_icui18n  : ${module_build_target_a_icui18n}</echo>
 		<echo>module_build_target_so_icuuc   : ${module_build_target_so_icuuc}</echo>
@@ -120,8 +122,8 @@
 	<target name="_build.o.icuuc" depends="_prepare" if="build_run_a">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icuuc}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags_icuuc}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icuuc}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -133,8 +135,8 @@
 		</apply>
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icuuc}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
+			<arg line="${module_build_cflags_icuuc}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icuuc}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -148,8 +150,8 @@
 	<target name="_build.o.icui18n" depends="_prepare" if="build_run_a">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icui18n}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags_icui18n}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icui18n}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -161,8 +163,8 @@
 		</apply>
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icui18n}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
+			<arg line="${module_build_cflags_icui18n}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icui18n}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -177,8 +179,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icuuc}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags_icuuc}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icuuc}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -191,8 +193,8 @@
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icuuc}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags_icuuc}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icuuc}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -207,8 +209,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object_icui18n}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags_icui18n}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icui18n}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -221,8 +223,8 @@
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object_icui18n}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags_icui18n}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs_icui18n}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -262,10 +264,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_so_icuuc}" />
 			<srcfile />
-			<arg line="${build_ext_icuuc_dlldef}" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags_icuuc}" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${module_dir_object_icuuc}" includes="*.lo" />
 		</apply>
 	</target>
@@ -276,12 +276,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_so_icui18n}" />
 			<srcfile />
-			<arg line="${build_ext_icui18n_dlldef}" />
-			<!-- add icuuc library reference for icui18n -->
-			<arg line="-L${module_dir_target} -licuuc" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags_icui18n}" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${module_dir_object_icui18n}" includes="*.lo" />
 		</apply>
 	</target>

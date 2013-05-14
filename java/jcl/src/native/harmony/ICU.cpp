@@ -728,7 +728,7 @@ Java_com_ibm_icu4jni_util_ICU_toUpperCase(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "com/ibm/icu4jni/util/ICU", gMethods, NELEM(gMethods));
  }
  */
-int register_com_ibm_icu4jni_util_ICU(JNIEnv* env) {
+int register_com_ibm_icu4jni_util_ICU(JNIEnv*) {
 	return JNI_OK;
 }
 

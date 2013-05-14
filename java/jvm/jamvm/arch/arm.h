@@ -131,8 +131,8 @@ do {                                                      \
     if(patch_size >= 4) {                                 \
         /* Guard against the pointer difference being     \
            larger than the signed range */                \
-        long long offset = (uintptr_t)(target_addr) -     \
-                           (uintptr_t)(patch_addr) - 8;   \
+        long long offset = (xuintptr)(target_addr) -      \
+                           (xuintptr)(patch_addr) - 8;    \
                                                           \
         if(offset >= -1<<25 && offset < 1<<25) {          \
             *(int*)(patch_addr) = offset>>2 & 0x00ffffff  \

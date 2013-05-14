@@ -13,10 +13,16 @@
 /* #undef C_ALLOCA */
 
 /* Define to the flags needed for the .section .eh_frame directive. */
-#define EH_FRAME_FLAGS "aw"
+#define EH_FRAME_FLAGS "a"
 
 /* Define this if you want extra debugging. */
 /* #undef FFI_DEBUG */
+
+/* Cannot use PROT_EXEC on this target, so, we revert to alternative means */
+/* #undef FFI_EXEC_TRAMPOLINE_TABLE */
+
+/* Define this if you want to enable pax emulated trampolines */
+/* #undef FFI_MMAP_EXEC_EMUTRAMP_PAX */
 
 /* Cannot use malloc on this target, so, we revert to alternative means */
 /* #undef FFI_MMAP_EXEC_WRIT */
@@ -34,6 +40,9 @@
    */
 #define HAVE_ALLOCA_H 1
 
+/* Define if your assembler supports .ascii. */
+#define HAVE_AS_ASCII_PSEUDO_OP 1
+
 /* Define if your assembler supports .cfi_* directives. */
 #define HAVE_AS_CFI_PSEUDO_OP 1
 
@@ -43,6 +52,12 @@
 /* Define if your assembler and linker support unaligned PC relative relocs.
    */
 /* #undef HAVE_AS_SPARC_UA_PCREL */
+
+/* Define if your assembler supports .string. */
+#define HAVE_AS_STRING_PSEUDO_OP 1
+
+/* Define if your assembler supports unwind section type. */
+/* #undef HAVE_AS_X86_64_UNWIND_SECTION_TYPE */
 
 /* Define if your assembler supports PC relative relocs. */
 #define HAVE_AS_X86_PCREL 1
@@ -78,7 +93,7 @@
 #define HAVE_MMAP_FILE 1
 
 /* Define if .eh_frame sections should be read-only. */
-/* #undef HAVE_RO_EH_FRAME */
+#define HAVE_RO_EH_FRAME 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -115,19 +130,22 @@
 #define PACKAGE "libffi"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "http://gcc.gnu.org/bugs.html"
+#define PACKAGE_BUGREPORT "http://github.com/atgreen/libffi/issues"
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "libffi"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "libffi 3.0.9"
+#define PACKAGE_STRING "libffi 3.0.13"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "libffi"
 
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
+
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "3.0.9"
+#define PACKAGE_VERSION "3.0.13"
 
 /* The size of `double', as computed by sizeof. */
 #define SIZEOF_DOUBLE 8
@@ -146,12 +164,15 @@
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
+/* Define if symbols are underscored. */
+/* #undef SYMBOL_UNDERSCORE */
+
 /* Define this if you are using Purify and want to suppress spurious messages.
    */
 /* #undef USING_PURIFY */
 
 /* Version number of package */
-#define VERSION "3.0.9"
+#define VERSION "3.0.13"
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
@@ -164,6 +185,9 @@
 /* #  undef WORDS_BIGENDIAN */
 # endif
 #endif
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* #undef size_t */
 
 
 #ifdef HAVE_HIDDEN_VISIBILITY_ATTRIBUTE

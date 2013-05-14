@@ -95,7 +95,7 @@ static jobject makeInterfaceAddress(JNIEnv* env, jint interfaceIndex, ifaddrs* i
 #endif // 0 - by cmjo
 //static jobjectArray NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv* env, jclass) {
 JNIEXPORT jobjectArray JNICALL
-Java_java_net_NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv* env, jclass) {
+Java_java_net_NetworkInterface_getAllInterfaceAddressesImpl(JNIEnv*, jclass) {
 	//    // Get the list of interface addresses.
 	//    ScopedInterfaceAddresses addresses;
 	//    if (!addresses.init()) {
@@ -185,8 +185,8 @@ static jboolean hasFlag(JNIEnv* env, jstring name, int flag) {
 #endif // 0 - by cmjo
 //static jbyteArray NetworkInterface_getHardwareAddressImpl(JNIEnv* env, jclass, jstring name) {
 JNIEXPORT jbyteArray JNICALL
-Java_java_net_NetworkInterface_getHardwareAddressImpl(JNIEnv* env, jclass,
-		jstring name) {
+Java_java_net_NetworkInterface_getHardwareAddressImpl(JNIEnv*, jclass,
+		jstring) {
 	//    ifreq ifr;
 	//    if (!doIoctl(env, name, SIOCGIFHWADDR, ifr)) {
 	//        return NULL;
@@ -210,7 +210,7 @@ Java_java_net_NetworkInterface_getHardwareAddressImpl(JNIEnv* env, jclass,
 
 //static jint NetworkInterface_getMTUImpl(JNIEnv* env, jclass, jstring name) {
 JNIEXPORT jint JNICALL
-Java_java_net_NetworkInterface_getMTUImpl(JNIEnv* env, jclass, jstring name) {
+Java_java_net_NetworkInterface_getMTUImpl(JNIEnv*, jclass, jstring) {
 	//    ifreq ifr;
 	//    doIoctl(env, name, SIOCGIFMTU, ifr); // May throw.
 	//    return ifr.ifr_mtu;
@@ -265,15 +265,15 @@ Java_java_net_NetworkInterface_isPointToPointImpl(JNIEnv* env, jclass,
 
 //static jboolean NetworkInterface_isUpImpl(JNIEnv* env, jclass, jstring name) {
 JNIEXPORT jboolean JNICALL
-Java_java_net_NetworkInterface_isUpImpl(JNIEnv* env, jclass, jstring name) {
+Java_java_net_NetworkInterface_isUpImpl(JNIEnv*, jclass, jstring) {
 	// return hasFlag(env, name, IFF_UP);
 	return TRUE;
 }
 
 //static jboolean NetworkInterface_supportsMulticastImpl(JNIEnv* env, jclass, jstring name) {
 JNIEXPORT jboolean JNICALL
-Java_java_net_NetworkInterface_supportsMulticastImpl(JNIEnv* env, jclass,
-		jstring name) {
+Java_java_net_NetworkInterface_supportsMulticastImpl(JNIEnv*, jclass,
+		jstring) {
 	// return hasFlag(env, name, IFF_MULTICAST);
 	return FALSE;
 }
@@ -292,7 +292,7 @@ Java_java_net_NetworkInterface_supportsMulticastImpl(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "java/net/NetworkInterface", gMethods, NELEM(gMethods));
  }
  */
-int register_java_net_NetworkInterface(JNIEnv* env) {
+int register_java_net_NetworkInterface(JNIEnv*) {
 	return JNI_OK;
 }
 

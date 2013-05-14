@@ -47,7 +47,7 @@ Java_java_io_FileDescriptor_syncImpl(JNIEnv* env, jobject obj) {
  return jniRegisterNativeMethods(env, "java/io/FileDescriptor", gMethods, NELEM(gMethods));
  }
  */
-int register_java_io_FileDescriptor(JNIEnv* env) {
+int register_java_io_FileDescriptor(JNIEnv*) {
 	return JNI_OK;
 }
 

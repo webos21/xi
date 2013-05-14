@@ -536,7 +536,7 @@ Java_java_io_File_renameToImpl(JNIEnv* env, jclass, jstring javaOldPath,
  return jniRegisterNativeMethods(env, "java/io/File", gMethods, NELEM(gMethods));
  }
  */
-int register_java_io_File(JNIEnv* env) {
+int register_java_io_File(JNIEnv*) {
 	return JNI_OK;
 }
 

@@ -276,7 +276,7 @@ Java_com_ibm_icu4jni_text_NativeCollation_setText(JNIEnv* env, jclass,
  gMethods, NELEM(gMethods));
  }
  */
-int register_com_ibm_icu4jni_text_NativeCollator(JNIEnv* env) {
+int register_com_ibm_icu4jni_text_NativeCollator(JNIEnv*) {
 	return JNI_OK;
 }
 

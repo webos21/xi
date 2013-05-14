@@ -88,7 +88,7 @@ Java_libcore_io_IoUtils_setBlocking(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "libcore/io/IoUtils", gMethods, NELEM(gMethods));
  }
  */
-int register_libcore_io_IoUtils(JNIEnv* env) {
+int register_libcore_io_IoUtils(JNIEnv*) {
 	return JNI_OK;
 }
 

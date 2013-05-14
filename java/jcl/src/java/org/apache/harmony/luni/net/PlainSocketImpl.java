@@ -237,7 +237,6 @@ public class PlainSocketImpl extends SocketImpl {
 		return new SocketInputStream(this);
 	}
 
-	@Override
 	public Object getOption(int optID) throws SocketException {
 		return netImpl.getSocketOption(fd, optID);
 	}
@@ -258,7 +257,6 @@ public class PlainSocketImpl extends SocketImpl {
 		netImpl.listen(fd, backlog);
 	}
 
-	@Override
 	public void setOption(int optID, Object val) throws SocketException {
 		netImpl.setSocketOption(fd, optID, val);
 	}

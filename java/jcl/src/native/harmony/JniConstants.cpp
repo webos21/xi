@@ -63,7 +63,7 @@ static jclass findClass(JNIEnv* env, const char* name) {
 }
 #endif // 0
 
-void JniConstants::init(JNIEnv* env) {
+void JniConstants::init(JNIEnv*) {
 #if 0
 	bidiRunClass = findClass(env, "org/apache/harmony/text/BidiRun");
     bigDecimalClass = findClass(env, "java/math/BigDecimal");

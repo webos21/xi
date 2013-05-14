@@ -192,7 +192,7 @@ Java_com_ibm_icu4jni_text_NativeBreakIterator_lastImpl(JNIEnv*, jclass,
  gMethods, NELEM(gMethods));
  }
  */
-int register_com_ibm_icu4jni_text_NativeBreakIterator(JNIEnv* env) {
+int register_com_ibm_icu4jni_text_NativeBreakIterator(JNIEnv*) {
 	return JNI_OK;
 }
 

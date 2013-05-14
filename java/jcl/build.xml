@@ -64,8 +64,8 @@
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
 		<property name="module_build_src_ex" value="" />
-		<property name="module_build_incdirs" value="-I${module_dir_output_inc} -I${current_dir_abs}/src/native/include" />
-		<property name="module_build_libdirs" value="-L${module_dir_output_lib}" />
+		<property name="module_build_cflags" value="-I${module_dir_output_inc} -I${current_dir_abs}/src/native/include ${build_java_jcl_cflags}" />
+		<property name="module_build_ldflags" value="-L${module_dir_output_lib} -lxibase -lz -licuuc -licui18n ${build_java_jcl_ldflags}" />
 		<property name="module_build_rpath" value="${module_dir_output_lib}" />
 		<property name="module_build_target_a" value="${build_opt_a_pre}jcl.${build_opt_a_ext}" />
 		<property name="module_build_target_so" value="${build_opt_so_pre}jcl.${build_opt_so_ext}" />
@@ -94,8 +94,8 @@
 		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
 		<echo>module_build_src_in     : ${module_build_src_in}</echo>
 		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
-		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
-		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
+		<echo>module_build_cflags     : ${module_build_cflags}</echo>
+		<echo>module_build_ldflags    : ${module_build_ldflags}</echo>
 		<echo>module_build_rpath      : ${module_build_rpath}</echo>
 		<echo>module_build_target_a   : ${module_build_target_a}</echo>
 		<echo>module_build_target_so  : ${module_build_target_so}</echo>
@@ -110,8 +110,8 @@
 	<target name="_build.o" depends="_prepare" if="build_run_a">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -123,8 +123,8 @@
 		</apply>
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -139,8 +139,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -153,8 +153,8 @@
 		<apply verbose="true" executable="${build_tool_cxx}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_cxx}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -183,12 +183,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_so}" />
 			<srcfile />
-			<arg line="${module_build_libdirs}" />
-			<arg line="-lxibase -lz -licuuc -licui18n" />
-			<arg line="${build_java_jcl_dlldef}" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcx}" />
 			<fileset dir="${module_dir_object}" includes="*.lo" />
 		</apply>
 	</target>

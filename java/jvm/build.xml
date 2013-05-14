@@ -62,9 +62,8 @@
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
 		<property name="module_build_src_ex" value="" />
-		<property name="module_build_incdirs" value="-I${module_dir_output_inc} -I${current_dir_abs}/jamvm" />
-		<property name="module_build_libdirs" value="-L${module_dir_output_lib} -lz -lffi" />
-		<property name="module_build_rpath" value="${module_dir_output_lib}" />
+		<property name="module_build_cflags" value="-I${module_dir_output_inc} -I${current_dir_abs}/jamvm ${build_java_jvm_cflags}" />
+		<property name="module_build_ldflags" value="-L${module_dir_output_lib} -lz -lffi -lxibase ${build_java_jvm_ldflags}" />
 		<property name="module_build_target_a" value="" />
 		<property name="module_build_target_so" value="" />
 		<property name="module_build_target_bin" value="jvm${build_opt_exe_ext}" />
@@ -91,9 +90,8 @@
 		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
 		<echo>module_build_src_in     : ${module_build_src_in}</echo>
 		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
-		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
-		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
-		<echo>module_build_rpath      : ${module_build_rpath}</echo>
+		<echo>module_build_cflags     : ${module_build_cflags}</echo>
+		<echo>module_build_ldflags    : ${module_build_ldflags}</echo>
 		<echo>module_build_target_a   : ${module_build_target_a}</echo>
 		<echo>module_build_target_so  : ${module_build_target_so}</echo>
 		<echo>module_build_target_bin : ${module_build_target_bin}</echo>
@@ -108,9 +106,9 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-fno-reorder-blocks" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -127,13 +125,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_bin}" />
 			<srcfile />
-			<arg line="${module_build_libdirs}" />
-			<!-- add XI library link -->
-			<arg line="-lxibase" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
-			<arg line="${build_opt_libexe}" />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcc}" />
 			<fileset dir="${module_dir_object}" includes="*.lo" />
 		</apply>
 	</target>
@@ -141,16 +134,11 @@
 		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
 			<arg line="${build_opt_ld}" />
 			<arg line="${build_opt_ld_so}libmiddle.so" />
-			<arg line="${build_opt_ld_rpath},${module_build_rpath}" />
 			<arg line="-o" />
 			<arg file="${module_dir_target}/libmiddle.so" />
 			<srcfile />
-			<arg line="${module_build_libdirs}" />
-			<!-- add XI library link -->
-			<arg line="-lxibase" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcc}" />
 			<fileset dir="${module_dir_object}" includes="*.lo" />
 		</apply>
 	</target>

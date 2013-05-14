@@ -52,7 +52,7 @@ Java_java_util_zip_CRC32_updateByteImpl(JNIEnv*, jobject, jbyte val, jlong crc) 
  return jniRegisterNativeMethods(env, "java/util/zip/CRC32", gMethods, NELEM(gMethods));
  }
  */
-int register_java_util_zip_CRC32(JNIEnv* env) {
+int register_java_util_zip_CRC32(JNIEnv*) {
 	return JNI_OK;
 }
 

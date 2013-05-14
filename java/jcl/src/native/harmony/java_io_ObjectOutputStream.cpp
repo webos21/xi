@@ -103,7 +103,7 @@ int register_java_io_ObjectOutputStream(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/io/ObjectOutputStream", gMethods, NELEM(gMethods));
 }
 */
-int register_java_io_ObjectOutputStream(JNIEnv* env) {
+int register_java_io_ObjectOutputStream(JNIEnv*) {
     return JNI_OK;
 }
 

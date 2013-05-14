@@ -266,7 +266,7 @@ Java_java_nio_charset_Charsets_toUtf8Bytes(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "java/nio/charset/Charsets", gMethods, NELEM(gMethods));
  }
  */
-int register_java_nio_charset_Charsets(JNIEnv* env) {
+int register_java_nio_charset_Charsets(JNIEnv*) {
 	return JNI_OK;
 }
 

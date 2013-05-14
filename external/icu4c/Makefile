@@ -66,9 +66,10 @@ module_build_src_mk_icuuc     += $(wildcard $(current_dir_abs)/common/*.cpp)
 module_build_src_mk_icui18n    = $(wildcard $(current_dir_abs)/i18n/*.c)
 module_build_src_mk_icui18n   += $(wildcard $(current_dir_abs)/i18n/*.cpp)
 module_build_src_ex            = %props_data.c
-module_build_incdirs_icuuc     = -I$(current_dir_abs)/common -I$(current_dir_abs)/i18n -DICU_DATA_DIR_PREFIX_ENV_VAR="ICU_HOME" -DICU_DATA_DIR="../res/icu" -DU_COMMON_IMPLEMENTATION -DHAVE_ANDROID_OS $(build_ext_icu4c_flags)
-module_build_incdirs_icui18n   = -I$(current_dir_abs)/common -I$(current_dir_abs)/i18n -DU_I18N_IMPLEMENTATION -DHAVE_ANDROID_OS $(build_ext_icu4c_flags) 
-module_build_libdirs           = 
+module_build_cflags_icuuc      = -I$(current_dir_abs)/common -I$(current_dir_abs)/i18n -DICU_DATA_DIR_PREFIX_ENV_VAR="ICU_HOME" -DICU_DATA_DIR="../res/icu" -DU_COMMON_IMPLEMENTATION -DHAVE_ANDROID_OS $(build_ext_icu4c_cflags)
+module_build_cflags_icui18n    = -I$(current_dir_abs)/common -I$(current_dir_abs)/i18n -DU_I18N_IMPLEMENTATION -DHAVE_ANDROID_OS $(build_ext_icu4c_cflags) 
+module_build_ldflags_icuuc     = $(build_ext_icu4c_ldf_uc)
+module_build_ldflags_icui18n   = -L$(module_dir_target) -licuuc $(build_ext_icu4c_ldf_i18n)
 module_build_target_a_icuuc    = $(build_opt_a_pre)icuuc.$(build_opt_a_ext)
 module_build_target_so_icuuc   = $(build_opt_so_pre)icuuc.$(build_opt_so_ext)
 module_build_target_a_icui18n  = $(build_opt_a_pre)icui18n.$(build_opt_a_ext)
@@ -153,9 +154,10 @@ prepare_result:
 	@echo "module_build_src_mk_icuuc      : $(module_build_src_mk_icuuc)"	
 	@echo "module_build_src_mk_icui8n     : $(module_build_src_mk_icui8n)"	
 	@echo "module_build_src_ex            : $(module_build_src_ex)"	
-	@echo "module_build_incdirs_icuuc     : $(module_build_incdirs_icuuc)"	
-	@echo "module_build_incdirs_icui18n   : $(module_build_incdirs_icui18n)"	
-	@echo "module_build_libdirs           : $(module_build_libdirs)"	
+	@echo "module_build_cflags_icuuc      : $(module_build_cflags_icuuc)"	
+	@echo "module_build_cflags_icui18n    : $(module_build_cflags_icui18n)"	
+	@echo "module_build_ldflags_icuuc     : $(module_build_ldflags_icuuc)"	
+	@echo "module_build_ldflags_icui18n   : $(module_build_ldflags_icui18n)"	
 	@echo "module_build_target_a_icuuc    : $(module_build_target_a)"	
 	@echo "module_build_target_a_icui18n  : $(module_build_target_a)"	
 	@echo "module_build_target_so_icuuc   : $(module_build_target_so)"	
@@ -192,11 +194,8 @@ $(module_build_target_so_icuuc): $(module_link_shared_icuuc)
 		$(build_opt_ld_so)$(module_build_target_so_icuuc) \
 		-o $(module_dir_target)/$(module_build_target_so_icuuc) \
 		$(module_link_shared_icuuc) \
-		$(module_build_libdirs) \
-		$(build_ext_icuuc_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
+		$(module_build_ldflags_icuuc) \
+		$(build_opt_ld_mgwcx)
 	@echo "================================================================"
 
 
@@ -209,12 +208,8 @@ $(module_build_target_so_icui18n): $(module_link_shared_icui18n)
 		$(build_opt_ld_so)$(module_build_target_so_icui18n) \
 		-o $(module_dir_target)/$(module_build_target_so_icui18n) \
 		$(module_link_shared_icui18n) \
-		$(module_build_libdirs) \
-		-L$(module_dir_target) -licuuc \
-		$(build_ext_icui18n_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
+		$(module_build_ldflags_icui18n) \
+		$(build_opt_ld_mgwcx)
 	@echo "================================================================"
 
 
@@ -248,26 +243,26 @@ clean: prepare
 ###################
 
 $(module_dir_object_icuuc)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_build_incdirs_icuuc) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags_icuuc) -c -o $@ $<
 
 $(module_dir_object_icuuc)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs_icuuc) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags_icuuc) -c -o $@ $<
 
 $(module_dir_object_icuuc)/%.o: %.cpp
-	$(build_tool_cxx) $(build_opt_cxx) -c $(module_build_incdirs_icuuc) -o $@ $<
+	$(build_tool_cxx) $(build_opt_cxx) $(module_build_cflags_icuuc) -c -o $@ $<
 
 $(module_dir_object_icuuc)/%.lo: %.cpp
-	$(build_tool_cxx) $(build_opt_cxx) $(build_opt_fPIC) -c $(module_build_incdirs_icuuc) -o$@ $<
+	$(build_tool_cxx) $(build_opt_cxx) $(build_opt_fPIC) $(module_build_cflags_icuuc) -c -o $@ $<
 
 $(module_dir_object_icui18n)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_build_incdirs_icui18n) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags_icui18n) -c -o $@ $<
 
 $(module_dir_object_icui18n)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs_icui18n) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags_icui18n) -c -o $@ $<
 
 $(module_dir_object_icui18n)/%.o: %.cpp
-	$(build_tool_cxx) $(build_opt_cxx) -c $(module_build_incdirs_icui18n) -o $@ $<
+	$(build_tool_cxx) $(build_opt_cxx) $(module_build_cflags_icui18n) -c -o $@ $<
 
 $(module_dir_object_icui18n)/%.lo: %.cpp
-	$(build_tool_cxx) $(build_opt_cxx) $(build_opt_fPIC) -c $(module_build_incdirs_icui18n) -o $@ $<
+	$(build_tool_cxx) $(build_opt_cxx) $(build_opt_fPIC) $(module_build_cflags_icui18n) -c -o $@ $<
 

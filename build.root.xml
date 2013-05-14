@@ -73,9 +73,9 @@
 	<target name="_prepare.check.runnable" depends="_prepare.load">
 		<condition property="ant_cfg_isRunnable">
 			<or>
-				<!-- Xnix can build [linux32,linux64,bcm7403,smp8654] -->
+				<!-- Xnix can build [linux32,linux64,android,bcm7403,smp8654] -->
 				<and>
-					<contains string="linux32,linux64,bcm7403,smp8654" substring="${build_cfg_target}" />
+					<contains string="linux32,linux64,android,bcm7403,smp8654" substring="${build_cfg_target}" />
 					<and>
 						<os family="unix" />
 						<not>

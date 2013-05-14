@@ -46,8 +46,8 @@
         cmpxchgq %4, %1;                            \
         sete %0"                                    \
     : "=q" (result), "=m" (*addr)                   \
-    : "m" (*addr), "a" ((uintptr_t)old_val),        \
-      "r" ((uintptr_t)new_val)                      \
+    : "m" (*addr), "a" ((xuintptr)old_val),         \
+      "r" ((xuintptr)new_val)                       \
     : "memory");                                    \
     result;                                         \
 })
@@ -80,14 +80,14 @@
                                                              \
     if(patch_size >= 1 + sizeof(type)) {                     \
         char *nxt_ins_ptr = (patch_addr) + 1 + sizeof(type); \
-        uintptr_t limit = 1ULL<<((sizeof(type) * 8) - 1);    \
+        xuintptr limit = 1ULL<<((sizeof(type) * 8) - 1);     \
                                                              \
         /* The check is done in two parts to ensure the      \
            result is always positive, to guard against       \
            the pointer difference being larger than the      \
            signed range */                                   \
         if(target_addr > nxt_ins_ptr) {                      \
-            uintptr_t disp = (target_addr) - (nxt_ins_ptr);  \
+            xuintptr disp = (target_addr) - (nxt_ins_ptr);   \
                                                              \
             if(disp < limit) {                               \
                 *(patch_addr) = opcode;                      \
@@ -95,7 +95,7 @@
                 patched = TRUE;                              \
             }                                                \
         } else {                                             \
-            uintptr_t disp = (nxt_ins_ptr) - (target_addr);  \
+            xuintptr disp = (nxt_ins_ptr) - (target_addr);   \
                                                              \
             if(disp <= limit) {                              \
                 *(patch_addr) = opcode;                      \

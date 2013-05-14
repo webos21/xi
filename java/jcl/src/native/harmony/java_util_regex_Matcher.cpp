@@ -249,7 +249,7 @@ Java_java_util_regex_Matcher_useTransparentBoundsImpl(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "java/util/regex/Matcher", gMethods, NELEM(gMethods));
  }
  */
-int register_java_util_regex_Matcher(JNIEnv* env) {
+int register_java_util_regex_Matcher(JNIEnv*) {
 	return JNI_OK;
 }
 

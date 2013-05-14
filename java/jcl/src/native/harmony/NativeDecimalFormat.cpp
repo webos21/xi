@@ -303,7 +303,7 @@ static jcharArray format(JNIEnv* env, jint addr, jobject fpIter, T val) {
 	DecimalFormat* fmt = toDecimalFormat(addr);
 	FieldPositionIterator fpi;
 	FieldPositionIterator* pfpi = fpIter ? &fpi : NULL;
-	fmt->format(val, str, pfpi, status);
+	fmt->format(reinterpret_cast<const Formattable&>(val), str, pfpi, status);
 	return formatResult(env, str, pfpi, fpIter);
 }
 
@@ -459,7 +459,7 @@ Java_com_ibm_icu4jni_text_NativeDecimalFormat_cloneImpl(JNIEnv*, jclass,
  NELEM(gMethods));
  }
  */
-int register_com_ibm_icu4jni_text_NativeDecimalFormat(JNIEnv* env) {
+int register_com_ibm_icu4jni_text_NativeDecimalFormat(JNIEnv*) {
 	return JNI_OK;
 }
 

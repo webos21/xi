@@ -60,7 +60,7 @@ Java_libcore_icu_NativeNormalizer_isNormalizedImpl(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "libcore/icu/NativeNormalizer", gMethods, NELEM(gMethods));
  }
  */
-int register_libcore_icu_NativeNormalizer(JNIEnv* env) {
+int register_libcore_icu_NativeNormalizer(JNIEnv*) {
 	return JNI_OK;
 }
 

@@ -302,7 +302,7 @@ bool byteArrayToSocketAddress(JNIEnv* env, jclass, jbyteArray byteArray,
 	}
 
 	// Convert the IP address bytes to the proper IP address type.
-	size_t addressLength = env->GetArrayLength(byteArray);
+	xsize addressLength = env->GetArrayLength(byteArray);
 	xi_mem_set(ss, 0, sizeof(*ss));
 	if (addressLength == 4) {
 		// IPv4 address.

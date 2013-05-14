@@ -128,7 +128,7 @@ xi_proc_mutex_re  xi_proc_mutex_destroy(xi_proc_mutex_t *lock);
  *                It can be NULL.
  * @return The resulting process handle.
  */
-xintptr xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[], xint32 envln,
+xint32   xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[], xint32 envln,
 			const xchar *workdir);
 
 
@@ -138,7 +138,7 @@ xintptr xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[],
  *
  * @return the process-id
  */
-xintptr  xi_proc_daemonize();
+xint32   xi_proc_daemonize();
 
 
 /**
@@ -146,7 +146,7 @@ xintptr  xi_proc_daemonize();
  *
  * @return the pid of current process
  */
-xintptr  xi_proc_getpid();
+xint32   xi_proc_getpid();
 
 
 /**
@@ -156,7 +156,7 @@ xintptr  xi_proc_getpid();
  * @param status The process exit code pointer
  * @return The child process id, if it success, 0 is not changed, if it failed <0
  */
-xintptr  xi_proc_waitpid(xintptr pid, xint32 *status);
+xint32   xi_proc_waitpid(xint32 pid, xint32 *status);
 
 
 /**
@@ -165,7 +165,7 @@ xintptr  xi_proc_waitpid(xintptr pid, xint32 *status);
  * @param pid target process-id
  * @return the value 0 if successful; otherwise it returns minus error value
  */
-xint32   xi_proc_term(xintptr pid);
+xint32   xi_proc_term(xint32 pid);
 
 
 /**

@@ -50,7 +50,7 @@ int register_java_util_zip_Adler32(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/util/zip/Adler32", gMethods, NELEM(gMethods));
 }
 */
-int register_java_util_zip_Adler32(JNIEnv* env) {
+int register_java_util_zip_Adler32(JNIEnv*) {
     return JNI_OK;
 }
 

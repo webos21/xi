@@ -309,6 +309,8 @@
  * @stable ICU 2.4
  */
 #define U16_APPEND(s, i, capacity, c, isError) { \
+	/* added by cmjo - avoid compiler warning */ \
+	(void)(isError); \
     if((uint32_t)(c)<=0xffff) { \
         (s)[(i)++]=(uint16_t)(c); \
     } else if((uint32_t)(c)<=0x10ffff && (i)+1<(capacity)) { \

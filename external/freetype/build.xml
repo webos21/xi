@@ -62,8 +62,8 @@
 		<property name="module_build_src_bin" value="" />
 		<property name="module_build_src_in" value="" />
 		<property name="module_build_src_ex" value="**/ttsbit0.c" />
-		<property name="module_build_incdirs" value="${build_ext_ft_flags} -I${current_dir_abs}/include" />
-		<property name="module_build_libdirs" value="" />
+		<property name="module_build_cflags" value="-I${current_dir_abs}/include ${build_ext_ft_cflags}" />
+		<property name="module_build_ldflags" value="${build_ext_ft_ldflags}" />
 		<property name="module_build_target_a" value="${build_opt_a_pre}freetype.${build_opt_a_ext}" />
 		<property name="module_build_target_so" value="${build_opt_so_pre}freetype.${build_opt_so_ext}" />
 	</target>
@@ -89,8 +89,8 @@
 		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
 		<echo>module_build_src_in     : ${module_build_src_in}</echo>
 		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
-		<echo>module_build_incdirs    : ${module_build_incdirs}</echo>
-		<echo>module_build_libdirs    : ${module_build_libdirs}</echo>
+		<echo>module_build_cflags     : ${module_build_cflags}</echo>
+		<echo>module_build_ldflags    : ${module_build_ldflags}</echo>
 		<echo>module_build_target_a   : ${module_build_target_a}</echo>
 		<echo>module_build_target_so  : ${module_build_target_so}</echo>
 		<echo>================================================================</echo>
@@ -103,8 +103,8 @@
 	<target name="_build.o" depends="_prepare" if="build_run_a">
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -119,8 +119,8 @@
 		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
 			<arg line="${build_opt_c}" />
 			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
 			<arg line="-c" />
-			<arg line="${module_build_incdirs}" />
 			<arg line="-o" />
 			<targetfile />
 			<srcfile />
@@ -149,10 +149,8 @@
 			<arg line="-o" />
 			<arg file="${module_dir_target}/${module_build_target_so}" />
 			<srcfile />
-			<arg line="${build_ext_ft_dlldef}" />
-			<arg line="${build_opt_mnocyg}" />
-			<arg line="${build_opt_libgcc}" />
-			<arg line="${build_opt_libgxx}" />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcc}" />
 			<fileset dir="${module_dir_object}" includes="*.lo" />
 		</apply>
 	</target>

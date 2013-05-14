@@ -220,7 +220,7 @@ Java_java_util_zip_Inflater_getTotalInImpl(JNIEnv*, jobject, jlong handle) {
  return jniRegisterNativeMethods(env, "java/util/zip/Inflater", gMethods, NELEM(gMethods));
  }
  */
-int register_java_util_zip_Inflater(JNIEnv* env) {
+int register_java_util_zip_Inflater(JNIEnv*) {
 	/*
 	 gCachedFields.finished = env->GetFieldID(JniConstants::inflaterClass, "finished", "Z");
 	 gCachedFields.inRead = env->GetFieldID(JniConstants::inflaterClass, "inRead", "I");

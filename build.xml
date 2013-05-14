@@ -87,18 +87,6 @@
 		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
 	</target>
 
-	<target name="bcm7403">
-		<property name="ant_cfg_target" value="bcm7403" />
-		<antcall target="_build.show" />
-		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
-	</target>
-
-	<target name="smp8654">
-		<property name="ant_cfg_target" value="smp8654" />
-		<antcall target="_build.show" />
-		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
-	</target>
-
 	<target name="mingw32">
 		<property name="ant_cfg_target" value="mingw32" />
 		<antcall target="_build.show" />
@@ -107,6 +95,24 @@
 
 	<target name="mingw64">
 		<property name="ant_cfg_target" value="mingw64" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="android">
+		<property name="ant_cfg_target" value="android" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="bcm7403">
+		<property name="ant_cfg_target" value="bcm7403" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="smp8654">
+		<property name="ant_cfg_target" value="smp8654" />
 		<antcall target="_build.show" />
 		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
 	</target>

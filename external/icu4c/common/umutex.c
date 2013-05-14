@@ -57,9 +57,7 @@
 #endif
 
 #if defined(POSIX) && (ICU_USE_THREADS==1)
-#error "this is not valid!!!!"
 # include <pthread.h> /* must be first, so that we get the multithread versions of things. */
-
 #endif /* POSIX && (ICU_USE_THREADS==1) */
 
 #ifdef U_WINDOWS
@@ -343,8 +341,6 @@ umtx_init(UMTX *mutex) {
         return;
     }
 #if defined(POSIX)
-#error "Error!!"
-
     if (mutex == &globalUMTX) {
         m = &globalMutex;
     }

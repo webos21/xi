@@ -73,7 +73,7 @@ int register_java_io_ObjectStreamClass(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/io/ObjectStreamClass", gMethods, NELEM(gMethods));
 }
 */
-int register_java_io_ObjectStreamClass(JNIEnv* env) {
+int register_java_io_ObjectStreamClass(JNIEnv*) {
     return JNI_OK;
 }
 

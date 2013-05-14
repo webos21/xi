@@ -84,8 +84,8 @@
                                                              \
         /* Guard against the pointer difference being        \
            larger than the signed range */                   \
-        long long disp = (uintptr_t)(target_addr) -          \
-                         (uintptr_t)(nxt_ins_ptr);           \
+        long long disp = (xuintptr)(target_addr) -           \
+                         (xuintptr)(nxt_ins_ptr);            \
         long long limit = 1LL << ((sizeof(type) * 8) - 1);   \
                                                              \
         if(disp >= -limit && disp < limit) {                 \

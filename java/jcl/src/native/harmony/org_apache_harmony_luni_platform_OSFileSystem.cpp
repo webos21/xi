@@ -122,7 +122,7 @@ static int EsTranslateOpenFlags(int flags) {
  jlong start, jlong length, jint typeFlag, jboolean waitFlag) {
  */
 JNIEXPORT jint JNICALL
-Java_org_apache_harmony_luni_platform_OSFileSystem_lockImpl(JNIEnv* env,
+Java_org_apache_harmony_luni_platform_OSFileSystem_lockImpl(JNIEnv*,
 		jobject, jint fd, jlong start, jlong length, jint typeFlag,
 		jboolean waitFlag) {
 	xint32 bexcl = ((typeFlag & SHARED_LOCK_TYPE) == SHARED_LOCK_TYPE) ? 0 : 1;
@@ -246,7 +246,7 @@ Java_org_apache_harmony_luni_platform_OSFileSystem_transfer(JNIEnv* env,
 	/* Value of offset is checked in jint scope (checked in java layer)
 	 The conversion here is to guarantee no value lost when converting offset to off_t
 	 */
-	xint64 off = offset;
+	xoff64 off = offset;
 
 	xint64 rc = xi_socket_sendfile(socket, fd, &off, count);
 	if (rc < 0) {
@@ -539,7 +539,7 @@ Java_org_apache_harmony_luni_platform_OSFileSystem_length(JNIEnv* env, jobject,
  NELEM(gMethods));
  }
  */
-int register_org_apache_harmony_luni_platform_OSFileSystem(JNIEnv* env) {
+int register_org_apache_harmony_luni_platform_OSFileSystem(JNIEnv*) {
 	return JNI_OK;
 }
 

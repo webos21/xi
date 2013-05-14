@@ -41,7 +41,7 @@ Java_java_io_Console_isatty(JNIEnv*, jclass, jint fd) {
 
 //static jint Console_setEchoImpl(JNIEnv* env, jclass, jboolean on, jint previousState) {
 JNIEXPORT jint JNICALL
-Java_java_io_Console_setEchoImpl(JNIEnv* env, jclass, jboolean on, jint previousState) {
+Java_java_io_Console_setEchoImpl(JNIEnv*, jclass, jboolean on, jint previousState) {
 	static xint32 lflag = 0;
 //    termios state;
 //    if (TEMP_FAILURE_RETRY(tcgetattr(STDIN_FILENO, &state)) == -1) {
@@ -70,7 +70,7 @@ int register_java_io_Console(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/io/Console", gMethods, NELEM(gMethods));
 }
 */
-int register_java_io_Console(JNIEnv* env) {
+int register_java_io_Console(JNIEnv*) {
     return JNI_OK;
 }
 

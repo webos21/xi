@@ -69,15 +69,27 @@ prepare:
 
 
 do_build:
-	$(MAKE) -C zlib TARGET=$(TARGET)
-	$(MAKE) -C libffi TARGET=$(TARGET)
-	$(TEST_VAR) "$(build_ext_iconv_run)" == "1" $(TEST_THEN) \
+	$(TEST_VAR) "$(build_ext_zlib_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C zlib TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_ffi_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C libffi TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_iconv_run)" $(TEST_EQ) "1" $(TEST_THEN) \
 		$(MAKE) -C libiconv TARGET=$(TARGET) \
 	$(TEST_END)
-	$(MAKE) -C libjpeg TARGET=$(TARGET)
-	$(MAKE) -C libpng TARGET=$(TARGET)
-	$(MAKE) -C freetype TARGET=$(TARGET)
-	$(MAKE) -C icu4c TARGET=$(TARGET)
+	$(TEST_VAR) "$(build_ext_jpeg_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C libjpeg TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_png_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C libpng TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_ft_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C freetype TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_icu4c_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C icu4c TARGET=$(TARGET) \
+	$(TEST_END)
 
 clean: prepare
 	$(RM) -rf "$(xi_external_target)"

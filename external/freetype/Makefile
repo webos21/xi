@@ -65,8 +65,8 @@ module_build_src_mk   += $(wildcard $(current_dir_abs)/src/sfnt/*.c)
 module_build_src_mk   += $(wildcard $(current_dir_abs)/src/smooth/*.c)
 module_build_src_mk   += $(wildcard $(current_dir_abs)/src/truetype/*.c)
 module_build_src_ex    = sfnt/ttsbit0.c
-module_build_incdirs   = $(build_ext_ft_flags) -I$(current_dir_abs)/include
-module_build_libdirs   = 
+module_build_cflags    = -I$(current_dir_abs)/include $(build_ext_ft_cflags)
+module_build_ldflags   = $(build_ext_ft_ldflags)
 module_build_target_a  = $(build_opt_a_pre)freetype.$(build_opt_a_ext)
 module_build_target_so = $(build_opt_so_pre)freetype.$(build_opt_so_ext)
 
@@ -131,8 +131,8 @@ prepare_result:
 	@echo "module_build_src_bin    : $(module_build_src_bin)"	
 	@echo "module_build_src_mk     : $(module_build_src_mk)"	
 	@echo "module_build_src_ex     : $(module_build_src_ex)"	
-	@echo "module_build_incdirs    : $(module_build_incdirs)"	
-	@echo "module_build_libdirs    : $(module_build_libdirs)"	
+	@echo "module_build_cflags     : $(module_build_cflags)"	
+	@echo "module_build_ldflags    : $(module_build_ldflags)"	
 	@echo "module_build_target_a   : $(module_build_target_a)"	
 	@echo "module_build_target_so  : $(module_build_target_so)"	
 	@echo "================================================================"
@@ -158,11 +158,8 @@ $(module_build_target_so): $(module_link_shared)
 		$(build_opt_ld_so)$(module_build_target_so) \
 		-o $(module_dir_target)/$(module_build_target_so) \
 		$(module_link_shared) \
-		$(module_build_libdirs) \
-		$(build_ext_ft_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
+		$(module_build_ldflags) \
+		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
 
@@ -189,8 +186,8 @@ clean: prepare
 ###################
 
 $(module_dir_object)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags) -c -o $@ $<
 
 $(module_dir_object)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags) -c -o $@ $<
 

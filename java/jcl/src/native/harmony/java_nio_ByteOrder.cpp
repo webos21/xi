@@ -33,7 +33,7 @@ Java_java_nio_ByteOrder_isLittleEndian(JNIEnv*, jclass) {
  return jniRegisterNativeMethods(env, "java/nio/ByteOrder", gMethods, NELEM(gMethods));
  }
  */
-int register_java_nio_ByteOrder(JNIEnv* env) {
+int register_java_nio_ByteOrder(JNIEnv*) {
 	return JNI_OK;
 }
 

@@ -61,18 +61,18 @@ module_dir_output_test = $(module_dir_output_base)/test
 module_build_src_bin   = $(build_xibase_src_bin)
 module_build_src_mk    = $(build_xibase_src_mk)
 module_build_src_ex    = $(build_xibase_src_ex)
-module_build_incdirs   = $(build_xibase_inc_dir)
-module_build_libdirs   = $(build_xibase_lib_dir)
+module_build_cflags    = $(build_xibase_cflags)
+module_build_ldflags   = $(build_xibase_ldflags)
 module_build_target_a  = $(build_opt_a_pre)xibase.$(build_opt_a_ext)
 module_build_target_so = $(build_opt_so_pre)xibase.$(build_opt_so_ext)
 
 module_test_src_bin    = $(buildtc_xibase_src_bin)
 module_test_src_mk     = $(buildtc_xibase_src_mk)
 module_test_src_ex     = $(buildtc_xibase_src_ex)
-module_test_incdirs    = $(buildtc_xibase_inc_dir)
-module_test_libdirs    = $(buildtc_xibase_lib_dir)
-module_test_target_a   = $(buildtc_opt_a_pre)xibasetest.$(build_opt_a_ext)
-module_test_target_so  = $(buildtc_opt_so_pre)xibasetest.$(build_opt_so_ext)
+module_test_cflags     = $(buildtc_xibase_cflags)
+module_test_ldflags    = -L$(module_dir_target) $(buildtc_xibase_ldflags)
+module_test_target_a   = $(build_opt_a_pre)xibasetest.$(build_opt_a_ext)
+module_test_target_so  = $(build_opt_so_pre)xibasetest.$(build_opt_so_ext)
 module_test_target_bin = xibase$(build_opt_exe_ext)
 
 # PREPARE : Set VPATH!!
@@ -151,16 +151,16 @@ prepare_result:
 	@echo "module_build_src_bin    : $(module_build_src_bin)"	
 	@echo "module_build_src_mk     : $(module_build_src_mk)"	
 	@echo "module_build_src_ex     : $(module_build_src_ex)"	
-	@echo "module_build_incdirs    : $(module_build_incdirs)"	
-	@echo "module_build_libdirs    : $(module_build_libdirs)"	
+	@echo "module_build_cflags     : $(module_build_cflags)"	
+	@echo "module_build_ldflags    : $(module_build_ldflags)"	
 	@echo "module_build_target_a   : $(module_build_target_a)"	
 	@echo "module_build_target_so  : $(module_build_target_so)"	
 	@echo "----------------------------------------------------------------"
 	@echo "module_test_src_bin     : $(module_test_src_bin)"	
 	@echo "module_test_src_mk      : $(module_test_src_mk)"	
 	@echo "module_test_src_ex      : $(module_test_src_ex)"	
-	@echo "module_test_incdirs     : $(module_test_incdirs)"	
-	@echo "module_test_libdirs     : $(module_test_libdirs)"	
+	@echo "module_test_cflags      : $(module_test_cflags)"	
+	@echo "module_test_ldflags     : $(module_test_ldflags)"	
 	@echo "module_test_target_a    : $(module_test_target_a)"	
 	@echo "module_test_target_so   : $(module_test_target_so)"
 	@echo "module_test_target_bin  : $(module_test_target_bin)"
@@ -187,12 +187,8 @@ $(module_build_target_so): $(module_link_shared)
 		$(build_opt_ld_so)$(module_build_target_so) \
 		-o $(module_dir_target)/$(module_build_target_so) \
 		$(module_link_shared) \
-		$(module_build_libdirs) \
-		$(build_xibase_lib_mod) \
-		$(build_xibase_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
+		$(module_build_ldflags) \
+		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
 
@@ -214,12 +210,8 @@ $(module_test_target_so): $(module_link_tshared)
 		$(build_opt_ld_so)$(module_test_target_so) \
 		-o $(module_dir_target)/$(module_test_target_so) \
 		$(module_link_tshared) \
-		$(module_test_libdirs) -L$(module_dir_target)\
-		$(buildtc_xibase_lib_mod) \
-		$(buildtc_xibase_dlldef) \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
+		$(module_test_ldflags) \
+		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
 
@@ -230,14 +222,11 @@ $(module_test_target_bin): $(module_test_target_so)
 	$(build_tool_linker) \
 		$(build_opt_ld) \
 		-o $(module_dir_target)/$(module_test_target_bin) \
-		$(module_link_tshared) \
-		$(module_test_incdirs) \
-		$(module_test_libdirs) -L$(module_dir_target)\
-		$(buildtc_xibase_lib_mod) -lxibasetest \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx) \
-		$(current_dir_abs)/test/$(module_test_src_bin)
+		$(module_test_cflags) \
+		$(current_dir_abs)/test/$(module_test_src_bin) \
+		-L$(module_dir_target) \
+		-lxibase -lxibasetest \
+		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
 
@@ -275,14 +264,14 @@ clean: prepare
 ###################
 
 $(module_dir_object)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags) -c -o $@ $<
 
 $(module_dir_object)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags) -c -o $@ $<
 
 $(module_dir_test)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_test_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_test_cflags) -c -o $@ $<
 
 $(module_dir_test)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_test_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_test_cflags) -c -o $@ $<
 

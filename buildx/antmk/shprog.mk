@@ -18,7 +18,7 @@
 #----------------------------------------------------#
 # File    : shprog.mk                                #
 # Version : 0.1.0                                    #
-# Desc    : properties file for finding shell cmd.   #
+# Desc    : properties for finding shell cmd.        #
 #----------------------------------------------------#
 # History)                                           #
 #   - 2013/04/16 : Created by cmjo                   #
@@ -37,6 +37,7 @@ CHMOD = echo "chmod"
 TEST_FILE = if EXIST
 TEST_DIR = if EXIST
 TEST_VAR = if
+TEST_EQ = "=="
 TEST_THEN = 
 TEST_END =
 else
@@ -48,6 +49,7 @@ CHMOD = chmod
 TEST_FILE = if test -f
 TEST_DIR = if test -d
 TEST_VAR = if test
+TEST_EQ = "="
 TEST_THEN = ; then
 TEST_END = ; fi
 endif

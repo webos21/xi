@@ -31,7 +31,7 @@
 #include "arch/arm.h"
 #elif defined(__mips__)
 #include "arch/mips.h"
-#elif defined(_x86_64) || defined(__M_AMD64) || defined(__MINGW64__)
+#elif defined(__x86_64) || defined(__M_AMD64) || defined(__MINGW64__)
 #include "arch/x86_64.h"
 #else
 #include "arch/i386.h"

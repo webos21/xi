@@ -204,7 +204,7 @@ int register_java_lang_Math(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/lang/Math", gMethods, NELEM(gMethods));
 }
 */
-int register_java_lang_Math(JNIEnv* env) {
+int register_java_lang_Math(JNIEnv*) {
     return JNI_OK;
 }
 

@@ -239,7 +239,7 @@ Java_org_apache_harmony_text_NativeBidi_ubidi_1reorderVisual(JNIEnv* env,
  gMethods, NELEM(gMethods));
  }
  */
-int register_org_apache_harmony_text_NativeBidi(JNIEnv* env) {
+int register_org_apache_harmony_text_NativeBidi(JNIEnv*) {
 	return JNI_OK;
 }
 

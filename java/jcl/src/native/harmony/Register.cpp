@@ -140,7 +140,7 @@ int jniRegisterSystemMethods(JNIEnv* env) {
 
 //#define LOGE printf
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+jint JNI_OnLoad(JavaVM* vm, void*) {
 	JNIEnv* env = NULL;
 	jint result = -1;
 

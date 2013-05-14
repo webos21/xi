@@ -27,11 +27,17 @@
 /* Define the platform we're on. */
 // edited by cmjo
 #if defined(__APPLE__)
-#define U_DARWIN
+#	ifndef U_DARWIN
+#		define U_DARWIN
+#	endif
 #elif defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
-#define U_WINDOWS
+#	ifndef U_WINDOWS
+#		define U_WINDOWS
+#	endif
 #else
-#define U_LINUX
+#	ifndef U_LINUX
+#		define U_LINUX
+#	endif
 #endif
 
 /**

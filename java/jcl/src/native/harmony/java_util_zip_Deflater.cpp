@@ -187,7 +187,7 @@ Java_java_util_zip_Deflater_setLevelsImpl(JNIEnv* env, jobject, int level,
  return jniRegisterNativeMethods(env, "java/util/zip/Deflater", gMethods, NELEM(gMethods));
  }
  */
-int register_java_util_zip_Deflater(JNIEnv* env) {
+int register_java_util_zip_Deflater(JNIEnv*) {
 	/*
 	 gCachedFields.finished = env->GetFieldID(JniConstants::deflaterClass, "finished", "Z");
 	 gCachedFields.inRead = env->GetFieldID(JniConstants::deflaterClass, "inRead", "I");

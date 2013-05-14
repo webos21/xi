@@ -72,7 +72,7 @@ Java_org_apache_harmony_luni_platform_OSMemory_malloc(JNIEnv* env, jclass,
 
 //static void OSMemory_free(JNIEnv* env, jclass, jint address) {
 JNIEXPORT void JNICALL
-Java_org_apache_harmony_luni_platform_OSMemory_free(JNIEnv* env, jclass,
+Java_org_apache_harmony_luni_platform_OSMemory_free(JNIEnv*, jclass,
 		jint address) {
 	jlong* p = reinterpret_cast<jlong*> (static_cast<xuintptr> (address));
 	//jlong* p = reinterpret_cast<jlong*> (static_cast<uintptr_t> (address));
@@ -403,7 +403,7 @@ Java_org_apache_harmony_luni_platform_OSMemory_load(JNIEnv*, jclass,
 //static jboolean OSMemory_isLoaded(JNIEnv*, jclass, jint address, jlong size) {
 JNIEXPORT jboolean JNICALL
 Java_org_apache_harmony_luni_platform_OSMemory_isLoaded(JNIEnv*, jclass,
-		jint address, jlong size) {
+		jint, jlong size) {
 	if (size == 0) {
 		return JNI_TRUE;
 	}
@@ -506,7 +506,7 @@ Java_org_apache_harmony_luni_platform_OSMemory_flush(JNIEnv*, jclass,
  gMethods, NELEM(gMethods));
  }
  */
-int register_org_apache_harmony_luni_platform_OSMemory(JNIEnv* env) {
+int register_org_apache_harmony_luni_platform_OSMemory(JNIEnv*) {
 	return JNI_OK;
 }
 

@@ -73,7 +73,7 @@ int register_java_util_regex_Pattern(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/util/regex/Pattern", gMethods, NELEM(gMethods));
 }
 */
-int register_java_util_regex_Pattern(JNIEnv* env) {
+int register_java_util_regex_Pattern(JNIEnv*) {
     return JNI_OK;
 }
 

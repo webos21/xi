@@ -147,8 +147,9 @@ Java_java_lang_VMProcess_nativeSpawn(JNIEnv * env, jobject this,
 	int i;
 	int err;
 
-	log_print(XDLOG,
-			"\n======== Java_java_lang_VMProcess_nativeSpawn ===========\n\n");
+	log_print(XDLOG, "\n====== Java_java_lang_VMProcess_nativeSpawn ======\n\n");
+	UNUSED(redirect);
+
 	/* Check for null */
 	if (cmdArray == NULL) {
 		goto null_pointer_exception;

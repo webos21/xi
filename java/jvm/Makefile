@@ -63,8 +63,8 @@ module_build_src_mk    += $(wildcard $(current_dir_abs)/jamvm/interp/*.c)
 module_build_src_mk    += $(wildcard $(current_dir_abs)/jamvm/interp/engine/*.c)
 module_build_src_mk    += $(module_build_src_bin)
 module_build_src_ex     = 
-module_build_incdirs    = -I$(module_dir_output_inc) -I$(current_dir_abs)/jamvm
-module_build_libdirs    = -L$(module_dir_output_lib) -lz -lffi
+module_build_cflags     = -I$(module_dir_output_inc) -I$(current_dir_abs)/jamvm $(build_java_jvm_cflags)
+module_build_ldflags    = -L$(module_dir_output_lib) -lz -lffi -lxibase $(build_java_jvm_ldflags)
 module_build_target_a   =
 module_build_target_so  =
 module_build_target_bin = jvm$(build_opt_exe_ext)
@@ -129,8 +129,8 @@ prepare_result:
 	@echo "module_build_src_bin    : $(module_build_src_bin)"	
 	@echo "module_build_src_mk     : $(module_build_src_mk)"	
 	@echo "module_build_src_ex     : $(module_build_src_ex)"	
-	@echo "module_build_incdirs    : $(module_build_incdirs)"	
-	@echo "module_build_libdirs    : $(module_build_libdirs)"	
+	@echo "module_build_cflags     : $(module_build_cflags)"	
+	@echo "module_build_ldflags    : $(module_build_ldflags)"	
 	@echo "module_build_target_a   : $(module_build_target_a)"	
 	@echo "module_build_target_so  : $(module_build_target_so)"	
 	@echo "module_build_target_bin : $(module_build_target_bin)"	
@@ -147,12 +147,8 @@ $(module_build_target_bin): $(module_link_shared)
 		$(build_opt_ld) \
 		-o $(module_dir_target)/$(module_build_target_bin) \
 		$(module_link_shared) \
-		$(module_build_libdirs) \
-		-lxibase \
-		$(build_opt_mnocyg) \
-		$(build_opt_libgcc) \
-		$(build_opt_libgxx)
-		$(build_opt_libexe)
+		$(module_build_ldflags) \
+		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
 
@@ -175,8 +171,8 @@ clean: prepare
 ###################
 
 $(module_dir_object)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags) -c -o $@ $<
 
 $(module_dir_object)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) -c $(module_build_incdirs) -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags) -c -o $@ $<
 

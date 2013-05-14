@@ -62,7 +62,7 @@ int register_java_lang_Double(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/lang/Double", gMethods, NELEM(gMethods));
 }
 */
-int register_java_lang_Double(JNIEnv* env) {
+int register_java_lang_Double(JNIEnv*) {
     return JNI_OK;
 }
 

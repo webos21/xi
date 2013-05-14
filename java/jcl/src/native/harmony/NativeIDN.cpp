@@ -72,7 +72,7 @@ Java_libcore_icu_NativeIDN_convertImpl(JNIEnv* env, jclass, jstring s,
  return jniRegisterNativeMethods(env, "libcore/icu/NativeIDN", gMethods, NELEM(gMethods));
  }
  */
-int register_libcore_icu_NativeIDN(JNIEnv* env) {
+int register_libcore_icu_NativeIDN(JNIEnv*) {
 	return JNI_OK;
 }
 

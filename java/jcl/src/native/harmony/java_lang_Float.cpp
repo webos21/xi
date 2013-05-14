@@ -62,7 +62,7 @@ int register_java_lang_Float(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/lang/Float", gMethods, NELEM(gMethods));
 }
 */
-int register_java_lang_Float(JNIEnv* env) {
+int register_java_lang_Float(JNIEnv*) {
     return JNI_OK;
 }
 

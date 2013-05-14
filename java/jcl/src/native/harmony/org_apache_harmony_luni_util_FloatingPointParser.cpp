@@ -873,7 +873,7 @@ Java_org_apache_harmony_luni_util_FloatingPointParser_parseDblImpl(JNIEnv* env,
  gMethods, NELEM(gMethods));
  }
  */
-int register_org_apache_harmony_luni_util_fltparse(JNIEnv* env) {
+int register_org_apache_harmony_luni_util_fltparse(JNIEnv*) {
 	return JNI_OK;
 }
 

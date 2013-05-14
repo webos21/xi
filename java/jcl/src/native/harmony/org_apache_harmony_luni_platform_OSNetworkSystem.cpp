@@ -169,6 +169,7 @@ public:
 	CompatibleSocketAddress(int fd, const xi_sock_addr_t& ss,
 			bool mapUnspecified) {
 		mCompatibleAddress = reinterpret_cast<const xi_sock_addr_t*> (&ss);
+		UNUSED(fd); UNUSED(mapUnspecified);
 	}
 
 	// Returns a pointer to an address compatible with the socket.
@@ -1066,6 +1067,7 @@ Java_org_apache_harmony_luni_platform_OSNetworkSystem_recvDirect(JNIEnv* env,
 			env->SetIntField(packet, dpack_port, port);
 		}
 	}
+	UNUSED(peek);
 	return bytesReceived;
 }
 
@@ -1585,6 +1587,8 @@ Java_org_apache_harmony_luni_platform_OSNetworkSystem_setSocketOption(
 	int intVal = 0;
 	bool wasBoolean = false;
 
+	UNUSED(wasBoolean);
+
 	jclass integerClass = env->FindClass("java/lang/Integer");
 	jclass booleanClass = env->FindClass("java/lang/Boolean");
 	jclass inetAddressClass = env->FindClass("java/net/InetAddress");
@@ -1841,7 +1845,7 @@ Java_org_apache_harmony_luni_platform_OSNetworkSystem_close(JNIEnv* env,
  "org/apache/harmony/luni/platform/OSNetworkSystem", gMethods, NELEM(gMethods));
  }
  */
-int register_org_apache_harmony_luni_platform_OSNetworkSystem(JNIEnv* env) {
+int register_org_apache_harmony_luni_platform_OSNetworkSystem(JNIEnv*) {
 	AsynchronousSocketCloseMonitor::init();
 	return JNI_OK;
 	//    return initCachedFields(env);

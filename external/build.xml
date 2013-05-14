@@ -62,14 +62,14 @@
 	<!-- ====================           MODULE           ================== -->
 
 	<!-- All -->
-	<target name="_emod.zlib" depends="_prepare">
+	<target name="_emod.zlib" depends="_prepare" if="build_ext_zlib_run">
 		<echo>External - zlib</echo>
 		<subant antfile="${xi_external_rel}/zlib/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
 	<target name="_emod.zlib.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/zlib/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.ffi" depends="_prepare">
+	<target name="_emod.ffi" depends="_prepare" if="build_ext_ffi_run">
 		<echo>External - ffi</echo>
 		<subant antfile="${xi_external_rel}/libffi/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
@@ -80,31 +80,31 @@
 		<echo>External - iconv</echo>
 		<subant antfile="${xi_external_rel}/libiconv/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.iconv.clean" depends="_prepare" if="xi.external.iconv.run">
+	<target name="_emod.iconv.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/libiconv/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.jpeg" depends="_prepare">
+	<target name="_emod.jpeg" depends="_prepare" if="build_ext_jpeg_run">
 		<echo>External - jpeg</echo>
 		<subant antfile="${xi_external_rel}/libjpeg/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
 	<target name="_emod.jpeg.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/libjpeg/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.png" depends="_prepare">
+	<target name="_emod.png" depends="_prepare" if="build_ext_png_run">
 		<echo>External - png</echo>
 		<subant antfile="${xi_external_rel}/libpng/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
 	<target name="_emod.png.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/libpng/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.freetype" depends="_prepare">
+	<target name="_emod.freetype" depends="_prepare" if="build_ext_ft_run">
 		<echo>External - freetype</echo>
 		<subant antfile="${xi_external_rel}/freetype/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
 	<target name="_emod.freetype.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/freetype/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
-	<target name="_emod.icu4c" depends="_prepare">
+	<target name="_emod.icu4c" depends="_prepare" if="build_ext_icu4c_run">
 		<echo>External - icu4u</echo>
 		<subant antfile="${xi_external_rel}/icu4c/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>

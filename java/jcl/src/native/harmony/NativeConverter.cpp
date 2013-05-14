@@ -831,7 +831,7 @@ Java_com_ibm_icu4jni_charset_NativeConverter_charsetForName(JNIEnv* env,
  gMethods, NELEM(gMethods));
  }
  */
-int register_com_ibm_icu4jni_converters_NativeConverter(JNIEnv* env) {
+int register_com_ibm_icu4jni_converters_NativeConverter(JNIEnv*) {
 	return JNI_OK;
 }
 

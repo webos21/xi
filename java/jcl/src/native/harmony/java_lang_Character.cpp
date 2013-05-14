@@ -223,7 +223,7 @@ int register_java_lang_Character(JNIEnv* env) {
     return jniRegisterNativeMethods(env, "java/lang/Character", gMethods, NELEM(gMethods));
 }
 */
-int register_java_lang_Character(JNIEnv* env) {
+int register_java_lang_Character(JNIEnv*) {
     return JNI_OK;
 }
 

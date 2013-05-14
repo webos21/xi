@@ -16,7 +16,7 @@
 ######################################################
 #                        XI                          #
 #----------------------------------------------------#
-# File    : build.linux64.properties                 #
+# File    : build_linux64.mk                         #
 # Version : 0.1.0                                    #
 # Desc    : properties file for LINUX 64bit build.   #
 #----------------------------------------------------#
@@ -26,11 +26,17 @@
 
 
 ########################
+# Programs
+########################
+include ${basedir}/buildx/antmk/shprog.mk
+
+
+########################
 # Build Configuration
 ########################
-build_cfg_target  = linux64
-build_cfg_linux   = 1
-build_cfg_posix   = 1
+build_cfg_target   = linux64
+build_cfg_linux    = 1
+build_cfg_posix    = 1
 
 
 ########################
@@ -42,43 +48,100 @@ build_tool_dir =
 ########################
 # Program Definition
 ########################
-build_tool_cc     = gcc
-build_tool_cxx    = g++
-build_tool_linker = g++
-build_tool_ar     = ar
-build_tool_ranlib = ranlib
+build_tool_as      = ${build_tool_dir}as
+build_tool_cc      = ${build_tool_dir}gcc
+build_tool_cxx     = ${build_tool_dir}g++
+build_tool_linker  = ${build_tool_dir}g++
+build_tool_ar      = ${build_tool_dir}ar
+build_tool_ranlib  = ${build_tool_dir}ranlib
 
 
 ########################
 # Compile Flags
 ########################
-build_run_a       =
-build_run_so      =
+#build_run_a        = 1
+build_run_so       = 1
+build_run_test     = 1
 
-build_opt_a_pre   = lib
-build_opt_a_ext   = a
-build_opt_so_pre  = lib
-build_opt_so_ext  = so
-build_opt_exe_ext =
+build_opt_a_pre    = lib
+build_opt_a_ext    = a
+build_opt_so_pre   = lib
+build_opt_so_ext   = so
+build_opt_exe_ext  =
 
-build_opt_c       = -g -Wall -Wextra -Wdeclaration-after-statement -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-build_opt_cxx     = -g -Wall -Wextra -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-build_opt_ld      = -g -Wl,--no-undefined
-build_opt_ld_so   = -shared -Wl,-soname,
-build_opt_ld_noud = -Wl,--no-undefined
-
-build_opt_fPIC    = -fPIC
-build_opt_mnocyg  = 
-build_opt_libgcc  = 
-build_opt_libgxx  = 
+build_opt_c        = -g -Wall -Wextra -Wdeclaration-after-statement -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+build_opt_cxx      = -g -Wall -Wextra -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+build_opt_fPIC     = -fPIC
+build_opt_ld       = -g -Wl,--no-undefined
+build_opt_ld_so    = -shared -Wl,-soname,
+build_opt_ld_rpath = -Wl,-rpath-link,
+build_opt_ld_noud  = -Wl,--no-undefined
+build_opt_ld_mgwcc =
+build_opt_ld_mgwcx =
 
 
 ########################
-# Compile Target
+# Compile Target : XI
 ########################
-build_xi_src_in   = xibase/src/_all/*.c, xibase/src/posix/*.c
-build_xi_src_ex   = 
-build_xi_inc_dir  = ${basedir}/include
-build_xi_lib_dir  = 
-build_xi_lib_mod  = -lpthread -lrt -ldl
+
+build_xibase_src_bin     =
+build_xibase_src_mk      = $(wildcard $(basedir)/src/base/src/_all/*.c)
+build_xibase_src_mk     += $(wildcard $(basedir)/src/base/src/posix/*.c)
+build_xibase_src_in      = _all/*.c, posix/*.c
+build_xibase_src_ex      = 
+build_xibase_cflags      = -I${basedir}/include
+build_xibase_ldflags     = -lpthread -ldl
+
+buildtc_xibase_src_bin   = tc_main.c
+buildtc_xibase_src_mk    = $(wildcard $(basedir)/src/base/test/*.c)
+buildtc_xibase_src_in    = *.c
+buildtc_xibase_src_ex    = tc_main.c
+buildtc_xibase_cflags    = -I${basedir}/include
+buildtc_xibase_ldflags   = -lxibase
+
+
+########################
+# Compile Target : Ext
+########################
+
+build_ext_zlib_run       = 1
+build_ext_zlib_cflags    =
+build_ext_zlib_ldflags   =
+
+build_ext_ffi_run        = 1
+build_ext_ffi_cflags     =
+build_ext_ffi_ldflags    =
+build_ext_ffi_srcdep     = linux64
+
+#build_ext_iconv_run      = 1
+build_ext_iconv_cflags   =
+build_ext_iconv_ldflags  =
+
+build_ext_jpeg_run       = 1
+build_ext_jpeg_cflags    =
+build_ext_jpeg_ldflags   =
+
+build_ext_png_run        = 1
+build_ext_png_cflags     =
+build_ext_png_ldflags    =
+
+build_ext_ft_run         = 1
+build_ext_ft_cflags      = -DFT2_BUILD_LIBRARY
+build_ext_ft_ldflags     =
+
+build_ext_icu4c_run      = 1
+build_ext_icu4c_cflags   = -DU_STATIC_IMPLEMENTATION
+build_ext_icu4c_ldf_uc   =
+build_ext_icu4c_ldf_i18n =
+
+
+########################
+# Compile Target : Java
+########################
+
+build_java_jvm_cflags    =
+build_java_jvm_ldflags   =
+
+build_java_jcl_cflags    =
+build_java_jcl_ldflags   =
 

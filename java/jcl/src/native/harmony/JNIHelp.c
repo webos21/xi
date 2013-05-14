@@ -291,7 +291,7 @@ void jniLogException(JNIEnv* env, int priority, const char* tag,
 	}
 }
 
-const char* jniStrError(int errnum, char* buf, size_t buflen) {
+const char* jniStrError(int errnum, char* buf, xsize buflen) {
 	/* note: glibc has a nonstandard strerror_r that returns char* rather
 	 * than POSIX's int.
 	 * char *strerror_r(int errnum, char *buf, size_t n); */
@@ -313,7 +313,7 @@ const char* jniStrError(int errnum, char* buf, size_t buflen) {
 	//        return ret;
 	//    }
 	char* ret = strerror(errnum);
-	if ((int) ret == -1) {
+	if ((long) ret == -1) {
 		xi_snprintf(buf, buflen, "errno %d", errnum);
 		return buf;
 	}
@@ -348,6 +348,7 @@ int registerJniHelp(JNIEnv* env) {
 		return -1;
 	}
 #endif
+	UNUSED(env);
 	return 0;
 }
 
@@ -355,16 +356,17 @@ int registerJniHelp(JNIEnv* env) {
  * Create a java.io.FileDescriptor given an integer fd
  */
 jobject jniCreateFileDescriptor(JNIEnv* env, int fd) {
-	log_print(XDLOG, "\n------------------------------------------------------------\n");
-	log_print(XDLOG, "------------------ jniCreateFileDescriptor ------------------\n");
-	log_print(XDLOG, "-------------------------------------------------------------\n");
-
 	jclass fileDescriptorClass = (*env)->FindClass(env,
 			"java/io/FileDescriptor");
 	jmethodID fileDescriptorCtor = (*env)->GetMethodID(env,
 			fileDescriptorClass, "<init>", "()V");
 	jobject fileDescriptor = (*env)->NewObject(env, fileDescriptorClass,
 			fileDescriptorCtor);
+
+	log_print(XDLOG, "\n------------------------------------------------------------\n");
+	log_print(XDLOG, "------------------ jniCreateFileDescriptor ------------------\n");
+	log_print(XDLOG, "-------------------------------------------------------------\n");
+
 	jniSetFileDescriptorOfFD(env, fileDescriptor, fd);
 	return fileDescriptor;
 }

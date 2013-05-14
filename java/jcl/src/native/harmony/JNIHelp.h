@@ -91,7 +91,7 @@ int jniThrowIOException(C_JNIEnv* env, int errnum);
  * This function is thread-safe (unlike strerror) and portable (unlike
  * strerror_r).
  */
-const char* jniStrError(int errnum, char* buf, size_t buflen);
+const char* jniStrError(int errnum, char* buf, xsize buflen);
 
 /*
  * Create a java.io.FileDescriptor given an integer fd

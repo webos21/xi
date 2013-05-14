@@ -326,7 +326,7 @@ Java_java_net_InetAddress_byteArrayToIpString(JNIEnv* env, jclass,
  return jniRegisterNativeMethods(env, "java/net/InetAddress", gMethods, NELEM(gMethods));
  }
  */
-int register_java_net_InetAddress(JNIEnv* env) {
+int register_java_net_InetAddress(JNIEnv*) {
 	return JNI_OK;
 }
 

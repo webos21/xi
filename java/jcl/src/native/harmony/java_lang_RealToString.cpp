@@ -72,7 +72,7 @@ Java_java_lang_RealToString_bigIntDigitGenerator(JNIEnv* env, jobject obj,
 	int high, low, i;
 	jint k, firstK, U;
 
-	xuint64 R[RM_SIZE], S[STemp_SIZE], mplus[RM_SIZE], mminus[RM_SIZE],
+	uint64_t R[RM_SIZE], S[STemp_SIZE], mplus[RM_SIZE], mminus[RM_SIZE],
 			Temp[STemp_SIZE];
 
 	xi_mem_set(R, 0, RM_SIZE * sizeof(xuint64));
@@ -234,7 +234,7 @@ Java_java_lang_RealToString_bigIntDigitGenerator(JNIEnv* env, jobject obj,
  return jniRegisterNativeMethods(env, "java/lang/RealToString", gMethods, NELEM(gMethods));
  }
  */
-int register_java_lang_RealToString(JNIEnv* env) {
+int register_java_lang_RealToString(JNIEnv*) {
 	return JNI_OK;
 }
 
