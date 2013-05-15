@@ -90,6 +90,9 @@ do_build:
 	$(TEST_VAR) "$(build_ext_icu4c_run)" $(TEST_EQ) "1" $(TEST_THEN) \
 		$(MAKE) -C icu4c TARGET=$(TARGET) \
 	$(TEST_END)
+	$(TEST_VAR) "$(build_ext_sqlite_run)" $(TEST_EQ) "1" $(TEST_THEN) \
+		$(MAKE) -C sqlite TARGET=$(TARGET) \
+	$(TEST_END)
 
 clean: prepare
 	$(RM) -rf "$(xi_external_target)"

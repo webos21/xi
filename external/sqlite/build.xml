@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright 2013 Cheolmin Jo (webos21@gmail.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<!-- Project is started from target "all"  -->
+<project name="xi.external.sqlite" default="all" basedir="../..">
+
+	<!-- ====================          PREPARE           ================== -->
+
+	<!-- PREPARE : Check Environment -->
+	<target name="_prepare.prop" unless="ant_cfg_issetTarget">
+		<echo>Warning : you are here without proper command!!!!</echo>
+		<property environment="env" />
+		<property file="${basedir}/buildx/antmk/project.mk" />
+		<property file="${basedir}/buildx/antmk/java.mk" />
+		<property file="${basedir}/buildx/antmk/build_${project_def_target}.mk" />
+		<property name="ant_cfg_target" value="${project_def_target}" />
+		<property name="ant_cfg_issetTarget" value="true" />
+	</target>
+
+	<!-- PREPARE : Make Directories -->
+	<target name="_prepare.mkdir" depends="_prepare.prop">
+		<!-- Base -->
+		<dirname property="current_dir_abs" file="${ant.file}" />
+		<basename property="current_dir_rel" file="${current_dir_abs}" />
+
+		<!-- Target -->
+		<property name="module_dir_target" value="${basedir}/ant/${build_cfg_target}/external/${current_dir_rel}" />
+		<property name="module_dir_object" value="${module_dir_target}/objects" />
+		<mkdir dir="${module_dir_target}" />
+		<mkdir dir="${module_dir_object}" />
+
+		<!-- Output -->
+		<property name="module_dir_output_base" value="${basedir}/ant/${build_cfg_target}/emul" />
+		<property name="module_dir_output_bin" value="${module_dir_output_base}/bin" />
+		<property name="module_dir_output_inc" value="${module_dir_output_base}/include" />
+		<property name="module_dir_output_lib" value="${module_dir_output_base}/lib" />
+		<property name="module_dir_output_res" value="${module_dir_output_base}/res" />
+		<property name="module_dir_output_test" value="${module_dir_output_base}/test" />
+		<mkdir dir="${module_dir_output_base}" />
+		<mkdir dir="${module_dir_output_bin}" />
+		<mkdir dir="${module_dir_output_inc}" />
+		<mkdir dir="${module_dir_output_lib}" />
+		<mkdir dir="${module_dir_output_res}" />
+		<mkdir dir="${module_dir_output_test}" />
+
+		<!-- Options -->
+		<property name="module_build_src_bin" value="" />
+		<property name="module_build_src_in" value="" />
+		<property name="module_build_src_ex" value="" />
+		<property name="module_build_cflags" value="-I${current_dir_abs}/include ${build_ext_sqlite_cflags}" />
+		<property name="module_build_ldflags" value=" ${build_ext_sqlite_ldflags}" />
+		<property name="module_build_target_a" value="${build_opt_a_pre}sqlite3.${build_opt_a_ext}" />
+		<property name="module_build_target_so" value="${build_opt_so_pre}sqlite3.${build_opt_so_ext}" />
+	</target>
+
+	<!-- PREPARE : Display prepared values  -->
+	<target name="_prepare.result" depends="_prepare.mkdir">
+		<echo>================================================================</echo>
+		<echo>ant.file                : ${ant.file}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>current_dir_abs         : ${current_dir_abs}</echo>
+		<echo>current_dir_rel         : ${current_dir_rel}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_target       : ${module_dir_target}</echo>
+		<echo>module_dir_object       : ${module_dir_object}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_dir_output_base  : ${module_dir_output_base}</echo>
+		<echo>module_dir_output_bin   : ${module_dir_output_bin}</echo>
+		<echo>module_dir_output_inc   : ${module_dir_output_inc}</echo>
+		<echo>module_dir_output_lib   : ${module_dir_output_lib}</echo>
+		<echo>module_dir_output_res   : ${module_dir_output_res}</echo>
+		<echo>module_dir_output_test  : ${module_dir_output_test}</echo>
+		<echo>----------------------------------------------------------------</echo>
+		<echo>module_build_src_bin    : ${module_build_src_bin}</echo>
+		<echo>module_build_src_in     : ${module_build_src_in}</echo>
+		<echo>module_build_src_ex     : ${module_build_src_ex}</echo>
+		<echo>module_build_cflags     : ${module_build_cflags}</echo>
+		<echo>module_build_ldflags    : ${module_build_ldflags}</echo>
+		<echo>module_build_target_a   : ${module_build_target_a}</echo>
+		<echo>module_build_target_so  : ${module_build_target_so}</echo>
+		<echo>================================================================</echo>
+	</target>
+
+	<target name="_prepare" depends="_prepare.result" />
+
+	<!-- ====================            BUILD           ================== -->
+
+	<target name="_build.o" depends="_prepare" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${module_build_cflags}" />
+			<arg line="-c" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/src" includes="**/**/**.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.o" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.lo" depends="_prepare" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_cc}" dest="${module_dir_object}" failonerror="true">
+			<arg line="${build_opt_c}" />
+			<arg line="${build_opt_fPIC}" />
+			<arg line="${module_build_cflags}" />
+			<arg line="-c" />
+			<arg line="-o" />
+			<targetfile />
+			<srcfile />
+			<fileset dir="${current_dir_abs}/src" includes="**/**/**.c" />
+			<chainedmapper>
+				<mapper type="flatten" />
+				<mapper type="glob" from="*.c" to="*.lo" />
+			</chainedmapper>
+		</apply>
+	</target>
+	<target name="_build.a" depends="_build.o" if="build_run_a">
+		<apply verbose="true" executable="${build_tool_ar}" failonerror="true">
+			<arg line="rcu" />
+			<arg file="${module_dir_target}/${module_build_target_a}" />
+			<srcfile />
+			<fileset dir="${module_dir_object}" includes="*.o" />
+		</apply>
+		<exec executable="${build_tool_ranlib}" failonerror="true">
+			<arg file="${module_dir_target}/${module_build_target_a}" />
+		</exec>
+	</target>
+	<target name="_build.so" depends="_build.lo" if="build_run_so">
+		<apply verbose="true" executable="${build_tool_linker}" failonerror="true" parallel="true">
+			<arg line="${build_opt_ld}" />
+			<arg line="${build_opt_ld_so}${module_build_target_so}" />
+			<arg line="-o" />
+			<arg file="${module_dir_target}/${module_build_target_so}" />
+			<srcfile />
+			<arg line="${module_build_ldflags}" />
+			<arg line="${build_opt_ld_mgwcc}" />
+			<fileset dir="${module_dir_object}" includes="*.lo" />
+		</apply>
+	</target>
+	<target name="_build.emul" depends="_build.a, _build.so">
+		<copy todir="${module_dir_output_inc}">
+			<fileset dir="${current_dir_abs}/include" includes="*.h" />
+		</copy>
+		<copy todir="${module_dir_output_lib}">
+			<fileset dir="${module_dir_target}" includes="${module_build_target_a},${module_build_target_so}" />
+		</copy>
+	</target>
+
+	<!-- ====================           ENTRY            ================== -->
+
+	<!-- All -->
+	<target name="all" depends="_prepare, _build.emul" />
+
+	<!-- CLEAN -->
+	<target name="clean" depends="_prepare">
+		<delete dir="${module_dir_target}" />
+	</target>
+
+</project>

@@ -111,11 +111,18 @@
 	<target name="_emod.icu4c.clean" depends="_prepare">
 		<subant antfile="${xi_external_rel}/icu4c/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>
+	<target name="_emod.sqlite" depends="_prepare" if="build_ext_sqlite_run">
+		<echo>External - sqlite</echo>
+		<subant antfile="${xi_external_rel}/sqlite/build.xml" inheritall="true" buildpath="${basedir}" />
+	</target>
+	<target name="_emod.sqlite.clean" depends="_prepare">
+		<subant antfile="${xi_external_rel}/sqlite/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
+	</target>
 
 	<!-- ====================           ENTRY            ================== -->
 
 	<!-- All -->
-	<target name="all" depends="_prepare, _emod.zlib, _emod.ffi, _emod.iconv, _emod.jpeg, _emod.png, _emod.freetype, _emod.icu4c" />
+	<target name="all" depends="_prepare, _emod.zlib, _emod.ffi, _emod.iconv, _emod.jpeg, _emod.png, _emod.freetype, _emod.icu4c, _emod.sqlite" />
 
 	<!-- CLEAN -->
 	<target name="clean" depends="_prepare">

@@ -146,6 +146,10 @@ build_ext_icu4c_cflags   = -DU_STATIC_IMPLEMENTATION
 build_ext_icu4c_ldf_uc   = -L${basedir}/lib/${build_cfg_target}/lib -lstlport_shared
 build_ext_icu4c_ldf_i18n = -L${basedir}/lib/${build_cfg_target}/lib -lstlport_shared
 
+build_ext_sqlite_run     = 1
+build_ext_sqlite_cflags  =
+build_ext_sqlite_ldflags =
+
 
 ########################
 # Compile Target : Java

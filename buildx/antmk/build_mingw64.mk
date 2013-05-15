@@ -133,6 +133,10 @@ build_ext_icu4c_cflags   = -DU_WINDOWS
 build_ext_icu4c_ldf_uc   = ${basedir}/external/icu4c/icuuc.def
 build_ext_icu4c_ldf_i18n = ${basedir}/external/icu4c/icui18n.def
 
+build_ext_sqlite_run     = 1
+build_ext_sqlite_cflags  =
+build_ext_sqlite_ldflags = ${basedir}/external/sqlite/sqlite3.def
+
 
 ########################
 # Compile Target : Java
