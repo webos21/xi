@@ -20,6 +20,9 @@
 
 #include <pthread.h>
 #include <errno.h>
+#ifdef __APPLE__
+#include <sys/time.h>
+#endif
 
 #include "xi/xi_thread.h"
 
@@ -366,9 +369,7 @@ xi_thread_cond_re xi_thread_cond_wait(xi_thread_cond_t *cond,
 		return XI_COND_RV_ERR_ARGS;
 	}
 }
-#include <sys/time.h>
-#include <limits.h>
-#include <stdio.h>
+
 xi_thread_cond_re xi_thread_cond_timedwait(xi_thread_cond_t *cond,
 		xi_thread_mutex_t *lock, xuint32 msec) {
 #ifdef __APPLE__
@@ -481,7 +482,7 @@ xi_thread_cond_re xi_thread_cond_destroy(xi_thread_cond_t *cond) {
 
 	fcond = &(_g_thr_conds.conds[cidx]);
 
-	ret = pthread_cond_destroy(&fcond->cond);
+	ret = pthread_cond_destroy(&(fcond->cond));
 	switch (ret) {
 	case 0:
 		xg_tcond_free(cidx);

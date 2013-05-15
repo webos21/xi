@@ -57,7 +57,7 @@ int tc_xi_dso() {
 	}
 
 	log_print(XDLOG, "[%s:%02d] get_sysname #################\n", tcname, t++);
-	ret = xi_dso_get_sysname(sbuf, "xg");
+	ret = xi_dso_get_sysname(sbuf, "xibase");
 	if (ret < 0) {
 		log_print(XDLOG, "    - result : failed!!!\n\n");
 		return -1;

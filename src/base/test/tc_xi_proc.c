@@ -28,7 +28,11 @@
 #ifdef WIN32
 #define PING_CMD "ping"
 #else // !WIN32
-#define PING_CMD "/bin/ping"
+#	ifdef __APPLE__
+#		define PING_CMD "/sbin/ping"
+#   else
+#		define PING_CMD "/bin/ping"
+#	endif
 #endif // WIN32
 
 static void tc_info() {

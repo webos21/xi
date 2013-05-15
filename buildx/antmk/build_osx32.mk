@@ -72,10 +72,10 @@ build_opt_exe_ext  =
 build_opt_c        = -m32 -g -Wall -Wextra -Wdeclaration-after-statement -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -DMACOSX
 build_opt_cxx      = -m32 -g -Wall -Wextra -O3 -DXI_BUILD_${build_cfg_target} -D_REENTRANT -D_THREAD_SAFE -DMACOSX
 build_opt_fPIC     = -fPIC
-build_opt_ld       = -m32 -g -Wl,--no-undefined
+build_opt_ld       = -m32 -g
 build_opt_ld_so    = -dynamiclib -Wl,-install_name,
 build_opt_ld_rpath = -Wl,-rpath-link,
-build_opt_ld_noud  = -Wl,--no-undefined
+build_opt_ld_noud  =
 build_opt_ld_mgwcc =
 build_opt_ld_mgwcx =
 
