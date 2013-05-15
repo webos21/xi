@@ -164,7 +164,7 @@ xi_proc_mutex_re xi_proc_mutex_destroy(xi_proc_mutex_t *lock) {
 	return XI_PROC_MUTEX_RV_OK;
 }
 
-xintptr xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[],
+xint32 xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[],
 		xint32 envln, const xchar *workdir) {
 	xint32 ret;
 
@@ -252,31 +252,47 @@ xintptr xi_proc_create(xchar * const cmdp[], xint32 cmdln, xchar * const envp[],
 		xi_mem_free(realenv);
 	}
 
-	return (ret == 0) ? -1 : (xintptr) pi.hProcess;
+	return (ret == 0) ? -1 : (xint32)pi.dwProcessId;
 }
 
-xintptr xi_proc_daemonize() {
+xint32 xi_proc_daemonize() {
 	// TODO
 	return 0;
 }
 
-xintptr xi_proc_getpid() {
-	return (xintptr) OpenProcess(PROCESS_ALL_ACCESS, TRUE, GetCurrentProcessId());
+xint32 xi_proc_getpid() {
+	return (xint32) GetCurrentProcessId();
 }
 
-xintptr xi_proc_waitpid(xintptr pid, xint32 *status) {
+xint32 xi_proc_waitpid(xint32 pid, xint32 *status) {
+	HANDLE procHnd = NULL;
 	DWORD procstat = 0;
 
-	procstat = WaitForSingleObject((HANDLE) pid, INFINITE);
-	GetExitCodeProcess((HANDLE) pid, &procstat);
-	(*status) = (xint32) procstat;
-	return pid;
+	procHnd = OpenProcess(PROCESS_ALL_ACCESS, TRUE, (DWORD)pid);
+	if (procHnd) {
+		procstat = WaitForSingleObject(procHnd, INFINITE);
+		GetExitCodeProcess(procHnd, &procstat);
+		(*status) = (xint32) procstat;
+		CloseHandle(procHnd);
+		return pid;
+	} else {
+		(*status) = -1;
+		return -1;
+	}
 }
 
-xint32 xi_proc_term(xintptr pid) {
-	int retVal = 0;
-	retVal = TerminateProcess((HANDLE) pid, 0);
-	return retVal;
+xint32 xi_proc_term(xint32 pid) {
+	HANDLE procHnd = NULL;
+	xint32 retVal = 0;
+
+	procHnd = OpenProcess(PROCESS_ALL_ACCESS, TRUE, (DWORD)pid);
+	if (procHnd) {
+		retVal = TerminateProcess(procHnd, 0);
+		CloseHandle(procHnd);
+		return retVal;
+	} else {
+		return -1;
+	}
 }
 
 xint32 xi_proc_atexit(xvoid(*func)()) {

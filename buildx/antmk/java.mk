@@ -24,8 +24,8 @@
 #   - 2011/06/15 : Created by cmjo                   #
 ######################################################
 
-#java_home            = C:/DevSoft/Java/jdk1.7.0_05
-java_home            = /home/appos/DevSoft/jdk1.5.0_22
+java_home            = C:/DevSoft/Java/jdk1.7.0_05
+#java_home            = /home/appos/DevSoft/jdk1.5.0_22
 
 java_opt_debug       = -g:none
 java_opt_deprecation = false
