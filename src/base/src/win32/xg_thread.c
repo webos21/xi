@@ -98,7 +98,8 @@ _XI_INLINE xg_thread_dat_t *xg_thread_tdat_get(xi_thread_t tid) {
 static xvoid xg_thrmain_init() {
 	xg_thread_dat_t *tdat;
 
-	xvoid *stackbase = NULL;
+	xuintptr baddr, abase;
+	xuintptr stackbase;
 	xsize stacksize = 0;
 
 	MEMORY_BASIC_INFORMATION meminfo;
@@ -109,8 +110,10 @@ static xvoid xg_thrmain_init() {
 	}
 
 	VirtualQuery(&meminfo, &meminfo, sizeof(meminfo));
-	stackbase = (xvoid*) (meminfo.BaseAddress + meminfo.RegionSize);
-	stacksize = stackbase - meminfo.AllocationBase;
+	baddr = (xuintptr)meminfo.BaseAddress;
+	abase = (xuintptr)meminfo.AllocationBase;
+	stackbase = baddr + meminfo.RegionSize;
+	stacksize = stackbase - abase;
 
 	//	log_print(XDLOG, "meminfo.AllocationBase = %p\n", meminfo.AllocationBase);
 	//	log_print(XDLOG, "meminfo.BaseAddress = %p\n", meminfo.BaseAddress);
@@ -139,7 +142,7 @@ static xvoid xg_thrmain_init() {
 
 		tdat->tid = (xi_thread_t) htarget;
 	}
-	tdat->stack_base = stackbase;
+	tdat->stack_base = (xvoid *)stackbase;
 	tdat->stack_top = &tdat;
 	tdat->state = XI_THREAD_STATE_RUNNING;
 	tdat->blocking = XI_THREAD_SUSBLK_NOBLOCK;

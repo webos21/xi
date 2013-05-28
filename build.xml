@@ -18,6 +18,27 @@
 
 <project name="xi" default="usage" basedir=".">
 
+	<!-- ====================      Custom Log Level      ================== -->
+	<scriptdef name="setloglevel" language="javascript">
+		<attribute name="level"/>
+		<![CDATA[
+		    var logger = project.getBuildListeners().firstElement();
+			var strlevel = attributes.get("level");
+			if (strlevel == "error") {
+				logger.setMessageOutputLevel(0);
+			} else if (strlevel == "warning") {
+				logger.setMessageOutputLevel(1);
+			} else if (strlevel == "info") {
+				logger.setMessageOutputLevel(2);
+			} else if (strlevel == "verbose") {
+				logger.setMessageOutputLevel(3);
+			} else {
+				logger.setMessageOutputLevel(4);
+			}
+		]]>
+	</scriptdef>
+	<setloglevel level="info"/>
+
 	<!-- ====================           USAGE            ================== -->
 
 	<target name="_usage.show">
@@ -83,6 +104,12 @@
 
 	<target name="osx64">
 		<property name="ant_cfg_target" value="osx64" />
+		<antcall target="_build.show" />
+		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
+	</target>
+
+	<target name="win32">
+		<property name="ant_cfg_target" value="win32" />
 		<antcall target="_build.show" />
 		<subant antfile="build.root.xml" target="all" inheritall="true" buildpath="${basedir}" />
 	</target>

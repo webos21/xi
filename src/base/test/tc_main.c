@@ -22,13 +22,10 @@
 
 #include <stdio.h>
 
-#include "xi/xi_log.h"
-#include "xi/xi_thread.h"
-
 #define XI_TC_TEST(tc) do { if(tc < 0) printf("!!!!!!!!!!!!!!!!!!!!!!!\n"); } while(0)
 
 int main(int argc, char **argv) {
-	UNUSED(argc); UNUSED(argv);
+	(void)(argc); (void)(argv);
 
 	printf("\n\n");
 	printf("==============================================================\n");
@@ -80,7 +77,11 @@ int main(int argc, char **argv) {
 	printf("\n\n");
 
 	while (1) {
-		xi_thread_sleep(1000);
+#ifdef _WIN32
+		Sleep(1000);
+#else
+		Sleep(1);
+#endif
 		printf("Test Alive!!!!\n");
 	}
 

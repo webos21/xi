@@ -93,7 +93,7 @@
 				</and>
 				<!-- Windows can build [mingw32,mingw64] -->
 				<and>
-					<contains string="mingw32,mingw64" substring="${build_cfg_target}" />
+					<contains string="mingw32,mingw64,win32,win64" substring="${build_cfg_target}" />
 					<os family="windows" />
 				</and>
 			</or>
@@ -141,14 +141,13 @@
 		<echo>----------------------------------------------------------------</echo>
 		<echo>build_opt_c             : ${build_opt_c}</echo>
 		<echo>build_opt_cxx           : ${build_opt_cxx}</echo>
+		<echo>build_opt_fPIC          : ${build_opt_fPIC}</echo>
 		<echo>build_opt_ld            : ${build_opt_ld}</echo>
 		<echo>build_opt_ld_so         : ${build_opt_ld_so}</echo>
+		<echo>build_opt_ld_rpath      : ${build_opt_ld_rpath}</echo>
 		<echo>build_opt_ld_noud       : ${build_opt_ld_noud}</echo>
-		<echo>----------------------------------------------------------------</echo>
-		<echo>build_opt_fPIC          : ${build_opt_fPIC}</echo>
-		<echo>build_opt_mnocyg        : ${build_opt_mnocyg}</echo>
-		<echo>build_opt_libgcc        : ${build_opt_libgcc}</echo>
-		<echo>build_opt_libgxx        : ${build_opt_libgxx}</echo>
+		<echo>build_opt_ld_mgwcc      : ${build_opt_ld_mgwcc}</echo>
+		<echo>build_opt_ld_mgwcx      : ${build_opt_ld_mgwcx}</echo>
 		<echo>================================================================</echo>
 	</target>
 

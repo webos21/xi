@@ -53,7 +53,7 @@
  * ----------------------------------------------
  * Generic helper definitions for shared library support
  ************************************************/
-#ifdef WIN32
+#ifdef _WIN32
 #	ifdef _WINDLL
 #		define _XI_API_PUBLIC __declspec(dllexport)   ///< Export the function name on WIN32
 #	else
@@ -97,7 +97,7 @@
  * The parameters are removed in the function.
  * @info __stdcall, __cdecl, __fastcall
  ************************************************/
-#if (WIN32 || __i386__ || __i686__ )
+#if defined(_WIN32) || defined(__i386__) || defined(__i686__)
 #	ifdef _MSC_VER
 #		define _XI_CALLTYPE_C     __cdecl                         ///< Mark the calling convention : cdecl
 #		define _XI_CALLTYPE_STD   __stdcall                       ///< Mark the calling convention : standard
@@ -107,11 +107,11 @@
 #		define _XI_CALLTYPE_STD   __attribute__ ((stdcall))       ///< Mark the calling convention : stdcall
 #		define _XI_CALLTYPE_FAST  __attribute__ ((fastcall))      ///< Mark the calling convention : fastcall
 #	endif // _MSC_VER
-#else // !(WIN32 || __i386__ || __i686__ )
+#else // !(_WIN32 || __i386__ || __i686__ )
 #	define _XI_CALLTYPE_C                                         ///< It has no meaning on *NIX
 #	define _XI_CALLTYPE_STD                                       ///< It has no meaning on *NIX
 #	define _XI_CALLTYPE_FAST                                      ///< It has no meaning on *NIX
-#endif // (WIN32 || __i386__ || __i686__ )
+#endif // (_WIN32 || __i386__ || __i686__ )
 
 
 /************************************************
@@ -277,17 +277,17 @@ typedef xint32             xfd;      ///< define the integer to file or socket d
  * ----------------------------------------------
  * Platform specific path MACROS
  ************************************************/
-#ifdef WIN32
+#ifdef _WIN32
 #	define XI_SEP_FILE_C  '\\'    ///< define the system dependent file separator character to '\\'
 #	define XI_SEP_FILE_S  "\\"    ///< define the system dependent file separator string to  "\\"
 #	define XI_SEP_PATH_C  ';'     ///< define the system dependent path separator character to ';'
 #	define XI_SEP_PATH_S  ";"     ///< define the system dependent path separator string to  ";"
-#else
+#else // !_WIN32
 #	define XI_SEP_FILE_C  '/'     ///< define the system dependent file separator character to '/'
 #	define XI_SEP_FILE_S  "/"     ///< define the system dependent file separator string to  "/"
 #	define XI_SEP_PATH_C  ':'     ///< define the system dependent path separator character to ':'
 #	define XI_SEP_PATH_S  ":"     ///< define the system dependent path separator string to  ":"
-#endif
+#endif // _WIN32
 
 /**
 * @}  // end of xtype

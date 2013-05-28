@@ -16,7 +16,7 @@
 ######################################################
 #                        XI                          #
 #----------------------------------------------------#
-# File    : Makefile                                 #
+# File    : Makefile.win.mk                          #
 # Version : 0.1.1                                    #
 # Desc    : [xi.src.base] Makefile.                  #
 #----------------------------------------------------#
@@ -36,9 +36,15 @@ include $(basedir)/buildx/antmk/build_$(project_def_target).mk
 TARGET = $(project_def_target)
 else
 need_warning = ""
+ifeq ($(TARGET),mingw32)
+EX_TARGET = win32
+endif
+ifeq ($(TARGET),mingw64)
+EX_TARGET = win64
+endif
 include $(basedir)/buildx/antmk/project.mk
 include $(basedir)/buildx/antmk/java.mk
-include $(basedir)/buildx/antmk/build_$(TARGET).mk
+include $(basedir)/buildx/antmk/build_$(EX_TARGET).mk
 endif
 
 # PREPARE : Directories
@@ -46,11 +52,11 @@ endif
 current_dir_abs        = $(CURDIR)
 current_dir_rel        = $(notdir $(current_dir_abs))
 # Base
-module_dir_target      = $(basedir)/amk/$(build_cfg_target)/xi/$(current_dir_rel)
+module_dir_target      = $(basedir)/amk/$(TARGET)/xi/$(current_dir_rel)
 module_dir_object      = $(module_dir_target)/object
 module_dir_test        = $(module_dir_target)/test
 # Output
-module_dir_output_base = $(basedir)/amk/$(build_cfg_target)/emul
+module_dir_output_base = $(basedir)/amk/$(TARGET)/emul
 module_dir_output_bin  = $(module_dir_output_base)/bin
 module_dir_output_inc  = $(module_dir_output_base)/include
 module_dir_output_lib  = $(module_dir_output_base)/lib
@@ -70,18 +76,14 @@ module_test_src_bin    = $(buildtc_xibase_src_bin)
 module_test_src_mk     = $(buildtc_xibase_src_mk)
 module_test_src_ex     = $(buildtc_xibase_src_ex)
 module_test_cflags     = $(buildtc_xibase_cflags)
-module_test_ldflags    = -L$(module_dir_target) $(buildtc_xibase_ldflags)
+module_test_ldflags    = -LIBPATH:$(module_dir_target) $(buildtc_xibase_ldflags)
 module_test_target_a   = $(build_opt_a_pre)xibasetest.$(build_opt_a_ext)
 module_test_target_so  = $(build_opt_so_pre)xibasetest.$(build_opt_so_ext)
 module_test_target_bin = xibase$(build_opt_exe_ext)
 
 # PREPARE : Set VPATH!!
 vpath
-ifeq ($(build_cfg_mingw), 1)
 vpath %.c $(current_dir_abs)/src/_all:$(current_dir_abs)/src/win32:$(current_dir_abs)/test
-else
-vpath %.c $(current_dir_abs)/src/_all:$(current_dir_abs)/src/posix:$(current_dir_abs)/test
-endif
 
 # PREPARE : Build Targets
 ifeq ($(build_run_a),1)
@@ -136,6 +138,11 @@ prepare_result:
 	@echo $(need_warning)
 	@echo "================================================================"
 	@echo "TARGET                  : $(TARGET)"
+	@echo "EX_TARGET               : $(EX_TARGET)"
+	@echo "----------------------------------------------------------------"
+	@echo "PATH                    : $(PATH)"
+	@echo "INCLUDE                 : $(INCLUDE)"
+	@echo "LIB                     : $(LIB)"
 	@echo "----------------------------------------------------------------"
 	@echo "current_dir_abs         : $(current_dir_abs)"
 	@echo "current_dir_rel         : $(current_dir_rel)"
@@ -187,8 +194,10 @@ $(module_build_target_so): $(module_link_shared)
 	@echo "----------------------------------------------------------------"
 	$(build_tool_linker) \
 		$(build_opt_ld) \
-		$(build_opt_ld_so)$(module_build_target_so) \
-		-o $(module_dir_target)/$(module_build_target_so) \
+		$(build_opt_ld_so) \
+		-PDB:$(module_dir_target)/$(module_build_target_so).pdb \
+		$(build_opt_cl_out) \
+		$(build_opt_ld_out)$(module_dir_target)/$(module_build_target_so) \
 		$(module_link_shared) \
 		$(module_build_ldflags) \
 		$(build_opt_ld_mgwcc)
@@ -210,8 +219,10 @@ $(module_test_target_so): $(module_link_tshared)
 	@echo "----------------------------------------------------------------"
 	$(build_tool_linker) \
 		$(build_opt_ld) \
-		$(build_opt_ld_so)$(module_test_target_so) \
-		-o $(module_dir_target)/$(module_test_target_so) \
+		$(build_opt_ld_so) \
+		-PDB:$(module_dir_target)/$(module_test_target_so).pdb \
+		$(build_opt_cl_out) \
+		$(build_opt_ld_out)$(module_dir_target)/$(module_test_target_so) \
 		$(module_link_tshared) \
 		$(module_test_ldflags) \
 		$(build_opt_ld_mgwcc)
@@ -224,9 +235,11 @@ $(module_test_target_bin): $(module_link_tbin) $(module_test_target_so)
 	@echo "----------------------------------------------------------------"
 	$(build_tool_linker) \
 		$(build_opt_ld) \
-		-o $(module_dir_target)/$(module_test_target_bin) \
+		-PDB:$(module_dir_target)/$(module_test_target_bin).pdb \
+		$(build_opt_cl_out) \
+		$(build_opt_ld_out)$(module_dir_target)/$(module_test_target_bin) \
 		$(module_link_tbin) \
-		-L$(module_dir_target) -lxibasetest \
+		-LIBPATH:$(module_dir_target) xibasetest.lib \
 		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 
@@ -242,7 +255,7 @@ post:
 	$(TEST_FILE) $(module_dir_target)/$(module_build_target_so) $(TEST_THEN) \
 		$(CP) $(module_dir_target)/$(module_build_target_so) $(module_dir_output_lib) \
 	$(TEST_END)
-	$(CP) -R $(basedir)/lib/$(build_cfg_target)/* $(module_dir_output_base)
+	$(CP) -R $(basedir)/lib/$(TARGET)/* $(module_dir_output_base)
 	$(CP) -R $(basedir)/res/* $(module_dir_output_res)
 	$(TEST_FILE) $(module_dir_target)/$(module_test_target_a) $(TEST_THEN) \
 		$(CP) $(module_dir_target)/$(module_test_target_a) $(module_dir_output_test) \
@@ -265,14 +278,14 @@ clean: prepare
 ###################
 
 $(module_dir_object)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) $(module_build_cflags) -c -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_build_cflags) $(build_opt_cl_conly) -Fd$(module_dir_object)/vc100.pdb $(build_opt_cl_pfx)$@ $<
 
 $(module_dir_object)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags) -c -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_build_cflags) $(build_opt_cl_conly) -Fd$(module_dir_object)/vc100.pdb $(build_opt_cl_pfx)$@ $<
 
 $(module_dir_test)/%.o: %.c
-	$(build_tool_cc) $(build_opt_c) $(module_test_cflags) -c -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(module_test_cflags) $(build_opt_cl_conly) -Fd$(module_dir_test)/vc100.pdb $(build_opt_cl_pfx)$@ $<
 
 $(module_dir_test)/%.lo: %.c
-	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_test_cflags) -c -o $@ $<
+	$(build_tool_cc) $(build_opt_c) $(build_opt_fPIC) $(module_test_cflags) $(build_opt_cl_conly) -Fd$(module_dir_test)/vc100.pdb $(build_opt_cl_pfx)$@ $<
 

@@ -60,6 +60,7 @@ prepare:
 	@$(MKDIR) -p "$(xi_src_target)"
 	@echo "================================================================"
 	@echo "TARGET                  : $(TARGET)"
+	@echo "MAKE_MODE               : $(MAKE_MODE)"
 	@echo "----------------------------------------------------------------"
 	@echo "xi_src_abs              : $(xi_src_abs)"
 	@echo "xi_src_rel              : $(xi_src_rel)"
@@ -69,7 +70,12 @@ prepare:
 
 
 do_build:
-	$(MAKE) -C base TARGET=$(TARGET)
+	$(TEST_VAR) "$(OS)" $(TEST_NEQ) "Windows_NT" $(TEST_THEN) \
+		$(MAKE) -C base TARGET=$(TARGET) \
+	$(TEST_END)
+	$(TEST_VAR) "$(OS)" $(TEST_EQ) "Windows_NT" $(TEST_THEN) \
+		cmd /c "..\buildx\antmk\build_window.bat $(TARGET) $(MAKE) -C base -f Makefile.win.mk \"TARGET=$(TARGET)\"" \
+	$(TEST_END)
 
 
 clean: prepare

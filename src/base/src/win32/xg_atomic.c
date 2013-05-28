@@ -32,9 +32,11 @@
 xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchange, xuint8 Comparand) {
 	return __sync_val_compare_and_swap(Destination, Comparand, Exchange);
 }
+#endif
+/*
 #else
 extern xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchange, xuint8 Comparand);
-#endif
+*/
 
 xuint8 xi_atomic_cas8(volatile xuint8 *mem, xuint8 with, xuint8 comp) {
 	_InterlockedCompareExchange8(mem, with, comp);
@@ -167,7 +169,7 @@ xvoid xi_atomic_sub16(volatile xuint16 *mem, xuint16 val) {
 
 xvoid xi_atomic_sub32(volatile xuint32 *mem, xuint32 val) {
 	// Windows long is always 32 bits
-	InterlockedExchangeAdd((long volatile*)mem, -val);
+	InterlockedExchangeAdd((long volatile*)mem, (0-val));
 }
 
 xvoid xi_atomic_sub64(volatile xuint64 *mem, xuint64 val) {
@@ -233,10 +235,13 @@ xuint64 xi_atomic_dec64(volatile xuint64 *mem) {
 
 #else // !_M_AMD64
 
-xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchange, xuint8 Comparand) {
 #if defined(__MINGW32__) || defined(__MINGW64__)
+xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchange, xuint8 Comparand) {
 	return __sync_val_compare_and_swap(Destination, Comparand, Exchange);
-#else
+}
+#endif
+/*
+extern xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchange, xuint8 Comparand); {
 	__asm {
 		mov  al,  Comparand
 			mov  dl,  Exchange
@@ -245,8 +250,8 @@ xuint8 _InterlockedCompareExchange8(volatile xuint8 *Destination, xuint8 Exchang
 			mov  Comparand, al
 	}
 	return Comparand;
-#endif
 }
+*/
 
 xuint8 xi_atomic_cas8(volatile xuint8 *mem, xuint8 with, xuint8 comp) {
 	return _InterlockedCompareExchange8(mem, with, comp);
@@ -371,7 +376,7 @@ xvoid xi_atomic_sub16(volatile xuint16 *mem, xuint16 val) {
 
 xvoid xi_atomic_sub32(volatile xuint32 *mem, xuint32 val) {
 	// Windows long is always 32 bits
-	InterlockedExchangeAdd((long volatile*)mem, -val);
+	InterlockedExchangeAdd((long volatile*)mem, (0-val));
 }
 
 xvoid xi_atomic_sub64(volatile xuint64 *mem, xuint64 val) {

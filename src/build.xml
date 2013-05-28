@@ -62,10 +62,19 @@
 	<!-- ====================           MODULE           ================== -->
 
 	<!-- All -->
-	<target name="_xi.xibase" depends="_prepare">
+	<target name="_xi.xibase.xnix" depends="_prepare" if="build_cfg_posix">
 		<echo>JAVA - jvm</echo>
 		<subant antfile="${xi_src_rel}/base/build.xml" inheritall="true" buildpath="${basedir}" />
 	</target>
+	<target name="_xi.xibase.win" depends="_prepare" if="build_cfg_mingw">
+		<echo>JAVA - jvm</echo>
+		<subant antfile="${xi_src_rel}/base/build.win.xml" target="${build_cfg_target}" buildpath="${basedir}" />
+	</target>
+	<target name="_xi.xibase.mac" depends="_prepare" if="build_cfg_mac">
+		<echo>JAVA - jvm</echo>
+		<subant antfile="${xi_src_rel}/base/build.mac..xml" buildpath="${basedir}" />
+	</target>
+	<target name="_xi.xibase" depends="_prepare, _xi.xibase.xnix, _xi.xibase.win, _xi.xibase.mac" />
 	<target name="_xi.xibase.clean" depends="_prepare">
 		<subant antfile="${xi_src_rel}/base/build.xml" target="clean" inheritall="true" buildpath="${basedir}" />
 	</target>

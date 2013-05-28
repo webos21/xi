@@ -18,15 +18,21 @@
  * File : tc.h
  */
 
-#include "xi/xtype.h"
-
 #ifndef _TC_H_
 #define _TC_H_
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <stdio.h>
+#endif
 
 /**
  * Start Declaration
  */
-_XI_EXTERN_C_BEGIN
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef enum _e_tc_rv {
 	TC_RV_OK = 0, TC_RV_ERR = -1
@@ -66,6 +72,8 @@ int tc_xi_thread_stress();
 /**
  * End Declaration
  */
-_XI_EXTERN_C_END
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _TC_H_

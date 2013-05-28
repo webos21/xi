@@ -34,7 +34,7 @@ include ${basedir}/buildx/antmk/shprog.mk
 ########################
 # Build Configuration
 ########################
-build_cfg_target  = win32
+build_cfg_target  = win64
 build_cfg_win     = 1
 #build_cfg_posix   = 1
 
@@ -48,9 +48,9 @@ build_winxx_vside  = C:\\Program\ Files\ \(x86\)\\Microsoft\ Visual\ Studio\ 10.
 build_winxx_vcdir  = ${build_winxx_vsdir}\\VC
 build_winxx_path   = ${build_winxx_vside}
 build_winxx_inc    = ${build_winxx_vcdir}\\include;${build_winxx_sdkdir}\\Include
-build_winxx_lib    = ${build_winxx_vcdir}\\lib;${build_winxx_sdkdir}\\Lib
+build_winxx_lib    = ${build_winxx_vcdir}\\lib\\amd64;${build_winxx_sdkdir}\\Lib\\x64
 
-build_tool_dir     = ${build_winxx_vcdir}\\bin
+build_tool_dir     = ${build_winxx_vcdir}\\bin\\x86_amd64
 
 
 ########################
@@ -77,9 +77,9 @@ build_opt_so_pre   =
 build_opt_so_ext   = dll
 build_opt_exe_ext  = .exe
 
-build_opt_c        = -Zi -nologo -W3 -WX- -Od -D "WIN32" -D "_DEBUG" -D "_WINDOWS" -D "_USRDLL"  -D "_WINDLL" -D "_MBCS" -D "XI_BUILD_${build_cfg_target}" -Gm -EHsc -RTC1 -MTd -GS -fp:precise -Zc:wchar_t -Zc:forScope -Gd -TC -analyze-
-build_opt_cxx      = -Zi -nologo -W3 -WX- -Od -D "WIN32" -D "_DEBUG" -D "_WINDOWS" -D "_USRDLL" -D "_WINDLL" -D "_MBCS" -D "XI_BUILD_${build_cfg_target}" -Gm -EHsc -RTC1 -MTd -GS -fp:precise -Zc:wchar_t -Zc:forScope -Gd -TP -analyze-
-build_opt_ld       = -DEBUG -MACHINE:x86 -NOLOGO -TLBID:1 -DYNAMICBASE -NXCOMPAT
+build_opt_c        = -Zi -nologo -W3 -WX- -Od -D "_WINDLL" -D "_MBCS" -D "XI_BUILD_${build_cfg_target}" -Gm -EHsc -RTC1 -MTd -GS -fp:precise -Zc:wchar_t -Zc:forScope -Gd -TC -analyze-
+build_opt_cxx      = -Zi -nologo -W3 -WX- -Od -D "_WINDLL" -D "_MBCS" -D "XI_BUILD_${build_cfg_target}" -Gm -EHsc -RTC1 -MTd -GS -fp:precise -Zc:wchar_t -Zc:forScope -Gd -TP -analyze-
+build_opt_ld       = -DEBUG -MACHINE:X64 -NOLOGO -TLBID:1 -DYNAMICBASE -NXCOMPAT
 build_opt_cl_conly = -c
 build_opt_cl_fPIC  =
 build_opt_cl_out   =

@@ -36,7 +36,7 @@ include ${basedir}/buildx/antmk/shprog.mk
 ########################
 build_cfg_target  = mingw32
 build_cfg_mingw   = 1
-build_cfg_posix   = 1
+#build_cfg_posix   = 1
 
 
 ########################
