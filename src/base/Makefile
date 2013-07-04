@@ -226,7 +226,7 @@ $(module_test_target_bin): $(module_link_tbin) $(module_test_target_so)
 		$(build_opt_ld) \
 		-o $(module_dir_target)/$(module_test_target_bin) \
 		$(module_link_tbin) \
-		-L$(module_dir_target) -lxibasetest \
+		$(build_opt_ld_rpath)$(module_dir_target) -L$(module_dir_target) -lxibasetest \
 		$(build_opt_ld_mgwcc)
 	@echo "================================================================"
 

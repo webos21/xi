@@ -21,6 +21,9 @@
 #include "tc.h"
 
 #include <stdio.h>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 
 #define XI_TC_TEST(tc) do { if(tc < 0) printf("!!!!!!!!!!!!!!!!!!!!!!!\n"); } while(0)
 
@@ -80,7 +83,7 @@ int main(int argc, char **argv) {
 #ifdef _WIN32
 		Sleep(1000);
 #else
-		Sleep(1);
+		sleep(1);
 #endif
 		printf("Test Alive!!!!\n");
 	}
