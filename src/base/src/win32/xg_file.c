@@ -413,7 +413,7 @@ xi_file_re xi_file_pipe(xint32 fd[2]) {
 	pfd[0].desc.f.perm = 00400;
 	pfd[0].desc.f.path = "PIPE";
 
-	pfd[0].desc.f.fd = hw;
+	pfd[1].desc.f.fd = hw;
 	pfd[1].type = XG_FD_TYPE_PIPE;
 	pfd[1].desc.f.mode = XI_FILE_MODE_WRITE;
 	pfd[1].desc.f.perm = 00200;
